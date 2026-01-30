@@ -32,6 +32,7 @@ A minimal, production-ready starter template for building SmileCX-compatible fro
   - [Git Hooks](#git-hooks)
   - [Commit Conventions](#commit-conventions)
 - [Design System Guide](#design-system-guide)
+- [Delivery Workflow for External Developers](#delivery-workflow-for-external-developers)
 - [Cherry-picking to Monorepo](#cherry-picking-to-monorepo)
 - [Code Style and Standards](#code-style-and-standards)
   - [TypeScript Configuration](#typescript-configuration)
@@ -43,11 +44,16 @@ A minimal, production-ready starter template for building SmileCX-compatible fro
 
 ## Quick Start
 
+> **For External Developers:** You should **fork** this repository first. See [Delivery Workflow](#delivery-workflow-for-external-developers) for the complete process.
+
 Get up and running in less than 2 minutes:
 
 ```bash
-# Clone the repository
-git clone <your-starter-repo-url>
+# Fork the repository (via GitHub UI or CLI)
+gh repo fork smile-cx/smilecx-frontend-starter --clone=true
+
+# Or clone your existing fork
+git clone https://github.com/your-org/smilecx-frontend-starter
 cd smilecx-frontend-starter
 
 # Install dependencies (requires Node.js 20+ and pnpm 9+)
@@ -1755,9 +1761,196 @@ render() {
 
 ---
 
+## Delivery Workflow for External Developers
+
+**IMPORTANT:** This repository is a **starter template**. The SmileCX team **does not accept Pull Requests** on this repository. Your work will be integrated into the main monorepo via cherry-picking after review.
+
+### Overview
+
+External developers build applications on a **fork** of this starter repository. Once development is complete, the SmileCX core team reviews the code and integrates approved features into the main monorepo.
+
+### Step-by-Step Workflow
+
+#### **1. Fork the Repository**
+
+Fork this repository to your GitHub account or organization:
+
+```bash
+# Via GitHub UI: Click "Fork" button
+# Or via GitHub CLI:
+gh repo fork smile-cx/smilecx-frontend-starter --clone=true
+```
+
+This gives you full autonomy to work on your fork without affecting the starter repository.
+
+#### **2. Work on Your Fork**
+
+Develop your application on the fork:
+
+```bash
+cd smilecx-frontend-starter
+
+# Create a feature branch
+git checkout -b feature/your-app-name
+
+# Build your application following this starter's patterns
+# - Create service module in src/apps/your-app/
+# - Register in DI container
+# - Build components
+# - Write tests
+
+# Commit following conventions
+git add .
+git commit -m "feat(your-app): add initial implementation"
+
+# Push to your fork
+git push origin feature/your-app-name
+```
+
+**Key Points:**
+
+- ✅ Follow **all patterns** from this starter (DI, BehaviorSubject, API, etc.)
+- ✅ Write **comprehensive tests** (services + components)
+- ✅ Follow **code style** (ESLint, Prettier, commit conventions)
+- ✅ Keep commits **clean and atomic**
+- ✅ Document your code (JSDoc comments, README in app directory)
+
+#### **3. Deliver Your Work**
+
+When your application is ready for review, communicate to the SmileCX team:
+
+**Required Information:**
+
+1. **Fork URL** - Example: `https://github.com/your-org/smilecx-frontend-starter`
+2. **Branch name** - Example: `feature/your-app-name`
+3. **Brief description** - What the application does, key features
+4. **Testing instructions** - How to test/demo the application
+
+**Communication Channels:**
+
+- Email to SmileCX core team
+- Internal project management system (Jira, etc.)
+- Slack/Teams channel (if available)
+
+**Example Message:**
+
+```
+Subject: Application Delivery - Task Manager
+
+Fork URL: https://github.com/acme-corp/smilecx-frontend-starter
+Branch: feature/task-manager
+Commit Range: abc123..def456
+
+Description:
+Task management application with:
+- Task CRUD operations
+- Status tracking (todo, in-progress, done)
+- Priority levels
+- Filtering and sorting
+
+Testing Instructions:
+1. Clone fork and checkout branch
+2. pnpm install && pnpm build
+3. pnpm dev (opens on :3336)
+4. Test scenarios documented in src/apps/task-manager/readme.md
+
+All tests passing (27/27).
+Build clean with no warnings.
+```
+
+#### **4. Code Review by SmileCX Team**
+
+The SmileCX core team will:
+
+1. **Clone your fork**:
+
+   ```bash
+   git clone https://github.com/your-org/smilecx-frontend-starter
+   cd smilecx-frontend-starter
+   git checkout feature/your-app-name
+   ```
+
+2. **Review code quality**:
+   - Architecture adherence (DI, services, components)
+   - Code style and conventions
+   - Test coverage and quality
+   - Documentation completeness
+
+3. **Run verification**:
+
+   ```bash
+   pnpm install
+   pnpm build      # Must pass
+   pnpm test       # Must pass
+   pnpm lint       # Must pass
+   pnpm dev        # Manual testing
+   ```
+
+4. **Provide feedback** if changes are needed:
+   - Requested changes communicated back to you
+   - You make changes on your fork
+   - Process repeats until approval
+
+#### **5. Integration into Monorepo (by SmileCX Team)**
+
+Once approved, the SmileCX team will:
+
+1. **Cherry-pick your commits** into the monorepo (see next section for technical details)
+2. **Adjust paths and imports** for monorepo structure
+3. **Run monorepo tests** to verify integration
+4. **Create internal PR** for final review
+5. **Merge and deploy**
+
+**You will be notified** when integration is complete.
+
+### Best Practices for Delivery
+
+#### **DO:**
+
+✅ **Keep your fork synchronized** with the upstream starter (in case updates are released)
+✅ **Test thoroughly** before delivery - all tests must pass
+✅ **Provide clear documentation** - explain your app's purpose and architecture
+✅ **Follow the patterns** demonstrated in OutboundManager
+✅ **Write meaningful commit messages** following conventional commits
+✅ **Include integration tests** if your app interacts with external APIs
+✅ **Document any external dependencies** you added
+
+#### **DON'T:**
+
+❌ **Don't create Pull Requests** to the starter repository
+❌ **Don't modify shared libraries** (libs/api, libs/logger) without approval
+❌ **Don't use unapproved libraries** for state management (only RxJS)
+❌ **Don't skip writing tests** - untested code will be rejected
+❌ **Don't ignore ESLint/Prettier** - code must be clean
+❌ **Don't commit secrets or credentials** (.env files, API keys)
+
+### Why This Workflow?
+
+**Benefits:**
+
+- **Autonomy**: Work freely on your fork without restrictions
+- **Quality Control**: SmileCX team ensures monorepo standards are met
+- **Clean History**: Only approved, clean commits enter the monorepo
+- **Traceability**: Full git history preserved from fork to monorepo
+- **Isolation**: Your development doesn't affect other teams
+
+**Comparison with PR Workflow:**
+
+| Aspect              | Fork + Cherry-pick (This Workflow) | Pull Request to Starter       |
+| ------------------- | ---------------------------------- | ----------------------------- |
+| **External access** | No access needed to starter repo   | Requires contributor access   |
+| **Review location** | Clone fork for review              | Review on starter repo        |
+| **Integration**     | Cherry-pick to monorepo            | Merge to starter, then move   |
+| **History**         | Clean, approved commits only       | All commits, including drafts |
+| **Autonomy**        | Full autonomy on fork              | Limited by starter repo rules |
+
+---
+
 ## Cherry-picking to Monorepo
 
-Once your application is stable, you can integrate it back into the SmileCX monorepo. This process involves cherry-picking commits from your standalone starter repo to the monorepo.
+> **Note:** This section is for the **SmileCX core team**. External developers deliver their work via fork (see previous section), and the core team handles integration.
+
+Once an external application is approved, the SmileCX core team integrates it into the monorepo. This process involves cherry-picking commits from the external developer's fork to the monorepo.
 
 ### Process Overview
 
@@ -1776,27 +1969,33 @@ cd /path/to/smilecx-monorepo
 git checkout -b feature/integrate-task-manager
 ```
 
-**2. Add Starter Repo as Remote**
+**2. Add External Developer's Fork as Remote**
 
 ```bash
-# Add starter repo as remote
-git remote add starter /path/to/smilecx-frontend-starter
+# Add external developer's fork as remote
+git remote add external-fork https://github.com/their-org/smilecx-frontend-starter
 
-# Fetch commits
-git fetch starter
+# Fetch commits from their fork
+git fetch external-fork
+
+# Checkout their branch to inspect
+git checkout external-fork/feature/their-app-name
 ```
 
 **3. Cherry-pick Commits**
 
 ```bash
-# List commits in starter repo
-git log starter/main --oneline
+# List commits in external fork's branch
+git log external-fork/feature/their-app-name --oneline
 
 # Cherry-pick specific commits
 git cherry-pick <commit-hash>
 
 # Or cherry-pick a range
 git cherry-pick <start-hash>..<end-hash>
+
+# Return to your monorepo branch
+git checkout feature/integrate-their-app
 ```
 
 **4. Adjust Import Paths**
