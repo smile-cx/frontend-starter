@@ -86,13 +86,15 @@ export class OutboundService implements IOutboundService {
     const response = await this.apiFetch.doPost<Campaign>(`/campaigns/${id}/start`, {});
 
     if (response.ok && response.data) {
+      const updatedCampaign = response.data;
+
       // Update campaign in list
-      const campaigns = this.campaigns$.value.map((c) => (c.id === id ? response.data : c));
+      const campaigns = this.campaigns$.value.map((c) => (c.id === id ? updatedCampaign : c));
       this.campaigns$.next(campaigns);
 
       // Update selected if it's the same campaign
       if (this.selectedCampaign$.value?.id === id) {
-        this.selectedCampaign$.next(response.data);
+        this.selectedCampaign$.next(updatedCampaign);
       }
 
       this.logger.log('Campaign started:', id);
@@ -112,13 +114,15 @@ export class OutboundService implements IOutboundService {
     const response = await this.apiFetch.doPost<Campaign>(`/campaigns/${id}/pause`, {});
 
     if (response.ok && response.data) {
+      const updatedCampaign = response.data;
+
       // Update campaign in list
-      const campaigns = this.campaigns$.value.map((c) => (c.id === id ? response.data : c));
+      const campaigns = this.campaigns$.value.map((c) => (c.id === id ? updatedCampaign : c));
       this.campaigns$.next(campaigns);
 
       // Update selected if it's the same campaign
       if (this.selectedCampaign$.value?.id === id) {
-        this.selectedCampaign$.next(response.data);
+        this.selectedCampaign$.next(updatedCampaign);
       }
 
       this.logger.log('Campaign paused:', id);
