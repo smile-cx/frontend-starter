@@ -33,7 +33,7 @@ A minimal, production-ready starter template for building SmileCX-compatible fro
   - [Commit Conventions](#commit-conventions)
 - [Design System Guide](#design-system-guide)
 - [Delivery Workflow for External Developers](#delivery-workflow-for-external-developers)
-- [Cherry-picking to Monorepo](#cherry-picking-to-monorepo)
+- [Integrating External Code into Monorepo](#integrating-external-code-into-monorepo)
 - [Code Style and Standards](#code-style-and-standards)
   - [TypeScript Configuration](#typescript-configuration)
   - [ESLint Rules](#eslint-rules)
@@ -1946,56 +1946,73 @@ Once approved, the SmileCX team will:
 
 ---
 
-## Cherry-picking to Monorepo
+## Integrating External Code into Monorepo
 
 > **Note:** This section is for the **SmileCX core team**. External developers deliver their work via fork (see previous section), and the core team handles integration.
 
-Once an external application is approved, the SmileCX core team integrates it into the monorepo. This process involves cherry-picking commits from the external developer's fork to the monorepo.
+Once an external application is approved, the SmileCX core team integrates it into the monorepo. This process involves copying approved code from the external fork into the monorepo.
+
+### Security Best Practice
+
+**⚠️ CRITICAL: Do NOT add external repositories as git remotes to the monorepo.**
+
+**Why:**
+
+- **Security Risk**: External repositories may contain untrusted code or malicious commits
+- **Git History Pollution**: Cherry-picking from external remotes pollutes monorepo history
+- **Access Control**: External repositories may have different access policies
+- **Dependency Confusion**: Git may pull unexpected commits from external sources
+
+**Instead:** Clone external forks to a separate directory, review thoroughly, then manually copy approved files.
 
 ### Process Overview
 
-1. **Develop in Starter**: Build and test your app in the standalone starter repo
-2. **Cherry-pick Commits**: Select commits to integrate into monorepo
+1. **Clone External Fork**: Review code in separate directory
+2. **Copy Approved Files**: Manually copy files into monorepo
 3. **Adjust Paths**: Update import paths for monorepo structure
-4. **Test Integration**: Verify app works in monorepo context
-5. **Submit PR**: Create pull request for review
+4. **Register in Container**: Add new module to container
+5. **Test Integration**: Verify app works in monorepo context
+6. **Submit PR**: Create pull request for review
 
 ### Step-by-Step Guide
 
-**1. Prepare Monorepo**
+**1. Clone External Developer's Fork (Outside Monorepo)**
+
+```bash
+# Clone external fork to temporary directory
+cd ~/code-review
+git clone https://github.com/their-org/smilecx-frontend-starter external-app-review
+cd external-app-review
+git checkout feature/their-app-name
+
+# Run verification
+pnpm install
+pnpm build      # Must pass
+pnpm test       # Must pass
+pnpm lint       # Must pass
+
+# Review code, test manually
+pnpm dev
+```
+
+**2. Prepare Monorepo Branch**
 
 ```bash
 cd /path/to/smilecx-monorepo
+git checkout main
+git pull
 git checkout -b feature/integrate-task-manager
 ```
 
-**2. Add External Developer's Fork as Remote**
+**3. Copy Approved Files to Monorepo**
 
 ```bash
-# Add external developer's fork as remote
-git remote add external-fork https://github.com/their-org/smilecx-frontend-starter
+# Copy the application directory
+cp -r ~/code-review/external-app-review/src/apps/task-manager \
+      packages/core/components/src/apps/
 
-# Fetch commits from their fork
-git fetch external-fork
-
-# Checkout their branch to inspect
-git checkout external-fork/feature/their-app-name
-```
-
-**3. Cherry-pick Commits**
-
-```bash
-# List commits in external fork's branch
-git log external-fork/feature/their-app-name --oneline
-
-# Cherry-pick specific commits
-git cherry-pick <commit-hash>
-
-# Or cherry-pick a range
-git cherry-pick <start-hash>..<end-hash>
-
-# Return to your monorepo branch
-git checkout feature/integrate-their-app
+# Verify files copied
+ls -la packages/core/components/src/apps/task-manager/
 ```
 
 **4. Adjust Import Paths**
@@ -2018,17 +2035,54 @@ import type { IApiFetch } from '@smile-cx/core-components/libs/api';
 import { tt } from '@smile-cx/core-components/libs/i18n';
 ```
 
-**5. Move Files to Monorepo Structure**
+**5. Register Module in Monorepo Container**
 
-```bash
-# Starter structure
-src/apps/task-manager/
+Update the monorepo's container to load the new module:
 
-# Becomes monorepo structure
-packages/core/components/src/apps/task-manager/
+```typescript
+// packages/core/components/src/di/smilecx-container.ts
+import { taskManagerModule } from '../apps/task-manager/task-manager.module';
+import { TASK_MANAGER_TYPES } from '../apps/task-manager/task-manager.types';
+
+export class SmileCxContainer extends Container {
+  async init(options: ContainerOptions) {
+    // ... existing modules ...
+
+    // Add new module
+    this.load(taskManagerModule);
+    console.log('TaskManager module loaded');
+
+    // ... rest of init ...
+  }
+
+  // Add convenience getter
+  get taskManager(): ITaskManagerService {
+    return this.get<ITaskManagerService>(TASK_MANAGER_TYPES.TaskManagerService);
+  }
+}
 ```
 
-**6. Test Integration**
+**6. Update App Shell (if needed)**
+
+If the app should be mounted in the shell:
+
+```typescript
+// packages/core/components/src/app-shell/scx-root/scx-root.tsx
+
+render() {
+  return (
+    <Host>
+      {/* Existing apps */}
+      <smilecx-outbound-manager></smilecx-outbound-manager>
+
+      {/* New app */}
+      <smilecx-task-manager></smilecx-task-manager>
+    </Host>
+  );
+}
+```
+
+**7. Test Integration**
 
 ```bash
 # Run tests
@@ -2044,19 +2098,56 @@ pnpm build --filter @smile-cx/core-components
 pnpm dev --filter @smile-cx/core-components
 ```
 
-**7. Submit Pull Request**
+**8. Commit and Submit Pull Request**
 
 ```bash
-# Commit changes
-git add .
-git commit -m "feat(apps): integrate task manager application"
+# Review changes
+git status
+git diff
+
+# Commit with attribution
+git add packages/core/components/src/apps/task-manager
+git commit -m "feat(apps): integrate task manager application
+
+Integrated from external developer fork:
+- Repository: https://github.com/their-org/smilecx-frontend-starter
+- Branch: feature/task-manager
+- Developer: @their-username
+
+Features:
+- Task CRUD operations
+- Status tracking
+- Priority levels
+- Filtering and sorting"
 
 # Push to remote
 git push origin feature/integrate-task-manager
 
 # Create PR via GitHub CLI
-gh pr create --title "Integrate Task Manager Application" --body "..."
+gh pr create --title "Integrate Task Manager Application" \
+  --body "Integration of external task manager app. All tests passing."
 ```
+
+### Handling External Dependencies
+
+**Check for new dependencies added by external developer:**
+
+```bash
+# Compare package.json between starter and external fork
+cd ~/code-review/external-app-review
+git diff main..feature/their-app-name -- package.json
+
+# If new dependencies were added, add them to monorepo
+cd /path/to/smilecx-monorepo
+pnpm --filter @smile-cx/core-components add <package-name>
+```
+
+**Review dependency approval:**
+
+- ✅ Standard libraries already in monorepo → OK
+- ⚠️ New utility libraries → Review with team
+- ❌ State management alternatives → Reject (RxJS only)
+- ❌ Large UI frameworks → Reject (Shoelace only)
 
 ### Path Mapping Reference
 
