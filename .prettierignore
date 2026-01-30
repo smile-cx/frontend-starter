@@ -1,0 +1,9 @@
+node_modules/
+dist/
+www/
+.stencil/
+loader/
+coverage/
+*.log
+package-lock.json
+pnpm-lock.yaml

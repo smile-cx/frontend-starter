@@ -1,0 +1,131 @@
+:host {
+  display: block;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.outbound-manager {
+  h1 {
+    margin: 0 0 2rem;
+    font-size: 2rem;
+    color: var(--sl-color-neutral-900);
+  }
+
+  .loading {
+    padding: 2rem;
+    text-align: center;
+    color: var(--sl-color-neutral-600);
+  }
+
+  p {
+    color: var(--sl-color-neutral-600);
+    margin: 1rem 0;
+  }
+}
+
+.campaigns-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.campaign-item {
+  padding: 1.5rem;
+  border: 2px solid var(--sl-color-neutral-200);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--sl-color-primary-400);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &.selected {
+    border-color: var(--sl-color-primary-600);
+    background-color: var(--sl-color-primary-50);
+  }
+
+  h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+    color: var(--sl-color-neutral-900);
+  }
+
+  p {
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+  }
+
+  .status {
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.active {
+      color: var(--sl-color-success-600);
+    }
+
+    &.paused {
+      color: var(--sl-color-warning-600);
+    }
+
+    &.completed {
+      color: var(--sl-color-neutral-600);
+    }
+  }
+
+  .stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--sl-color-neutral-700);
+
+    span {
+      font-weight: 500;
+    }
+  }
+}
+
+.campaign-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--sl-color-neutral-50);
+  border-radius: 8px;
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.btn-primary {
+      background-color: var(--sl-color-primary-600);
+      color: white;
+
+      &:hover:not(:disabled) {
+        background-color: var(--sl-color-primary-700);
+      }
+    }
+
+    &.btn-secondary {
+      background-color: var(--sl-color-neutral-200);
+      color: var(--sl-color-neutral-900);
+
+      &:hover:not(:disabled) {
+        background-color: var(--sl-color-neutral-300);
+      }
+    }
+  }
+}
