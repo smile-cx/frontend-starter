@@ -7,7 +7,7 @@ import { starter } from '../../../di/containers';
 interface TabConfig {
   id: string;
   label: string;
-  renderContent: () => JSX.Element;
+  renderContent: () => unknown;
 }
 
 /**

@@ -1,0 +1,376 @@
+/**
+ * Example Components Showcase Styles
+ *
+ * Minimal styles for tab content. Tab UI is handled by Shoelace.
+ */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.showcase {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+
+.showcase-header {
+  margin-bottom: 2rem;
+  text-align: center;
+
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.125rem;
+    color: #6b7280;
+  }
+}
+
+/* ============================================
+   Tab Icon
+   ============================================ */
+
+.tab-icon {
+  margin-right: 0.5rem;
+  font-size: 1.125rem;
+}
+
+/* ============================================
+   Tab Content
+   ============================================ */
+
+.tab-content {
+  padding: 1.5rem 0;
+
+  h3 {
+    margin: 2rem 0 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  p {
+    margin: 0 0 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: #374151;
+  }
+
+  ul {
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+
+    li {
+      margin-bottom: 0.5rem;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      color: #374151;
+
+      strong {
+        font-weight: 600;
+        color: #111827;
+      }
+
+      code {
+        padding: 0.125rem 0.375rem;
+        background: #f3f4f6;
+        border-radius: 4px;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.8125rem;
+        color: #6b7280;
+      }
+    }
+  }
+}
+
+.description {
+  margin: 0 0 2rem;
+  padding: 1rem;
+  border-left: 3px solid #3b82f6;
+  background: #eff6ff;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #1e40af;
+
+  code {
+    padding: 0.125rem 0.375rem;
+    background: #dbeafe;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: #1e40af;
+  }
+}
+
+/* ============================================
+   Example Demo
+   ============================================ */
+
+.example-demo {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  background: #fafafa;
+
+  h3 {
+    margin-top: 0;
+  }
+}
+
+.result {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid #3b82f6;
+  background: white;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.demo-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+
+    select {
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: white;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+
+      &:hover {
+        border-color: #9ca3af;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+    }
+  }
+}
+
+.empty-state-demo {
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+}
+
+/* ============================================
+   Code Examples
+   ============================================ */
+
+.code-example {
+  margin-bottom: 2rem;
+
+  h3 {
+    margin-top: 2rem;
+  }
+
+  pre {
+    margin: 0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: #1e293b;
+    overflow-x: auto;
+
+    /* Scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: #475569 #1e293b;
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+
+    code {
+      display: block;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      white-space: pre;
+    }
+  }
+}
+
+/* ============================================
+   API Documentation
+   ============================================ */
+
+.api-docs {
+  margin-bottom: 2rem;
+
+  h3 {
+    margin-top: 2rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+
+    thead {
+      background: #f9fafb;
+
+      th {
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid #e5e7eb;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-align: left;
+        color: #111827;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid #e5e7eb;
+        transition: background-color 0.15s ease;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          background: #f9fafb;
+        }
+      }
+
+      td {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        color: #374151;
+
+        code {
+          padding: 0.125rem 0.375rem;
+          background: #f3f4f6;
+          border-radius: 4px;
+          font-family: 'Monaco', 'Courier New', monospace;
+          font-size: 0.8125rem;
+          color: #ef4444;
+        }
+      }
+    }
+  }
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  .showcase {
+    padding: 1rem;
+  }
+
+  .showcase-header {
+    margin-bottom: 1.5rem;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .tab-content {
+    padding: 1rem 0;
+  }
+
+  .example-demo {
+    padding: 1rem;
+  }
+
+  .demo-controls {
+    flex-direction: column;
+  }
+
+  .code-example pre {
+    padding: 1rem;
+
+    code {
+      font-size: 0.8125rem;
+    }
+  }
+
+  .api-docs table {
+    display: block;
+    overflow-x: auto;
+
+    thead th,
+    tbody td {
+      padding: 0.5rem;
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+
+@media print {
+  .showcase {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .demo-button {
+    display: none;
+  }
+
+  .code-example pre {
+    page-break-inside: avoid;
+  }
+
+  .api-docs table {
+    page-break-inside: avoid;
+  }
+}

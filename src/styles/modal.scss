@@ -1,0 +1,57 @@
+/**
+ * Modal Dialog Styles
+ *
+ * Ported from legacy smart-components/src/scss/main.bundle.scss (lines 414-462)
+ * Styles for native <dialog> element used by Modal service
+ */
+
+// html dialog
+dialog {
+  margin: auto;
+  box-sizing: border-box;
+  border: 0;
+  outline: 0;
+  padding: 0;
+  border-radius: var(--sl-border-radius-medium, 8px);
+  animation: none;
+  &:focus-visible {
+    outline: 0;
+  }
+}
+
+dialog[open] {
+  animation: show-dialog 0.3s ease-in;
+}
+
+dialog.close {
+  animation: hide-dialog 0.3s ease-out;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  animation: none;
+}
+
+dialog[open]::backdrop {
+  animation: show-dialog 0.3s ease-in;
+}
+
+dialog.close::backdrop {
+  animation: hide-dialog 0.3s ease-out;
+}
+
+@keyframes show-dialog {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hide-dialog {
+  to {
+    opacity: 0;
+  }
+}

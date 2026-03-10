@@ -1,0 +1,96 @@
+/**
+ * Modal Component Mixin
+ * Use this mixin in modal components with shadow: true
+ *
+ * Usage:
+ * @use '../../../../scss/mixins/modal' as modal;
+ *
+ * :host {
+ *   @include modal.scx-modal();
+ * }
+ */
+
+@mixin scx-modal() {
+  display: block;
+  height: 100%;
+
+  .modal-wrapper {
+    height: 100%;
+    font-family: var(--sl-font-sans);
+    font-size: var(--sl-font-size-small);
+    color: var(--sl-color-neutral-950);
+    display: grid;
+    grid-template-rows: 56px auto 72px;
+    grid-template-areas:
+      'head'
+      'content'
+      'footer';
+
+    .modal-head {
+      grid-area: head;
+      display: flex;
+      align-items: center;
+      font-size: var(--sl-font-size-small);
+      padding: var(--sl-spacing-medium);
+      height: 56px;
+      box-sizing: border-box;
+      border-radius: 6px 6px 0 0;
+      background-color: var(--sl-color-bg0);
+      font-weight: var(--sl-font-weight-bold);
+
+      .modal-title {
+        flex: auto;
+      }
+
+      .modal-close {
+        cursor: pointer;
+      }
+    }
+
+    .modal-content {
+      grid-area: content;
+      padding: var(--sl-spacing-medium);
+      overflow-y: auto;
+
+      &:focus-visible {
+        outline: unset;
+      }
+    }
+
+    .modal-footer {
+      grid-area: footer;
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      padding: var(--sl-spacing-medium);
+      box-sizing: border-box;
+      gap: var(--sl-spacing-x-small);
+
+      .warning-message {
+        font-size: var(--sl-font-size-small);
+        font-style: italic;
+        color: var(--sl-color-neutral-1000);
+        margin-right: var(--sl-spacing-medium);
+
+        &.error {
+          color: var(--sl-color-danger-base);
+        }
+      }
+    }
+
+    &.no-footer {
+      grid-template-rows: 56px auto;
+      grid-template-areas:
+        'head'
+        'content';
+
+      .modal-footer {
+        display: none;
+      }
+    }
+
+    &:focus-visible {
+      outline: unset;
+    }
+  }
+}
