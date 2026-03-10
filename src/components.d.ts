@@ -5,7 +5,150 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { IModal } from "./libs/modal";
+import { StyleEventDetail } from "./shared/scx-radio-group/scx-radio-button/scx-radio-button";
+import { RadioGroupChangeEventDetail } from "./shared/scx-radio-group/scx-radio-group";
+export { IModal } from "./libs/modal";
+export { StyleEventDetail } from "./shared/scx-radio-group/scx-radio-button/scx-radio-button";
+export { RadioGroupChangeEventDetail } from "./shared/scx-radio-group/scx-radio-group";
 export namespace Components {
+    interface ScxEmptyState {
+        "esTitle"?: string;
+        "icon": string;
+        "label"?: string;
+    }
+    /**
+     * Example Components Showcase
+     * Dynamic tab-based documentation component using Shoelace tabs.
+     * Features:
+     * - Shoelace sl-tab-group for native tab UI
+     * - Easy to add new components (just add to tabs array)
+     * - Live interactive examples
+     * - Code snippets with syntax highlighting
+     * - API documentation tables
+     * Adding a new component:
+     * 1. Add new object to `tabs` array in componentWillLoad()
+     * 2. Create render method for content
+     * 3. Done! Tab is automatically rendered
+     * Usage:
+     * ```html
+     * <scx-example-components></scx-example-components>
+     * ```
+     */
+    interface ScxExampleComponents {
+    }
+    interface ScxIconsExample {
+    }
+    /**
+     * Example Modal Component
+     * Demonstrates how to create a modal content component that works with the Modal Service.
+     * Key Patterns:
+     * - Receives `modal` prop from Modal Service
+     * - Calls `modal.close()` with appropriate data
+     * - Uses confirm/dismiss flags to indicate user action
+     * - Follows standard modal structure with modal-wrapper, modal-head, modal-content, modal-footer
+     * Usage:
+     * ```typescript
+     * import { starter } from '../../di/containers';
+     * const modal = starter.modal;
+     * modal.create({
+     *   component: 'scx-example-modal',
+     *   width: '500px',
+     *   dismissOnEsc: true,
+     *   backdropDismiss: true,
+     *   componentProps: {
+     *     modalTitle: 'Confirm Action',
+     *     message: 'Are you sure you want to proceed?'
+     *   }
+     * });
+     * modal.onDismiss((data) => {
+     *   if (data.confirm) {
+     *     console.log('User confirmed');
+     *   } else {
+     *     console.log('User cancelled');
+     *   }
+     * });
+     * modal.show();
+     * ```
+     */
+    interface ScxModalExample {
+        /**
+          * Modal message (optional) Passed via componentProps
+          * @default 'This is an example modal component.'
+         */
+        "message": string;
+        /**
+          * Modal service reference Automatically injected by Modal Service
+         */
+        "modal": IModal;
+        /**
+          * Modal title (optional) Passed via componentProps
+          * @default 'Example Modal'
+         */
+        "modalTitle": string;
+    }
+    interface ScxRadioButton {
+        /**
+          * If `true`, the radio is selected.
+          * @default false
+         */
+        "checked": boolean;
+        /**
+          * If `true`, the user cannot interact with the radio.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * The name of the control, which is submitted with the form data.
+          * @default this.inputId
+         */
+        "name": string;
+        /**
+          * The size of the radio button.
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * The value of the radio button.
+         */
+        "value"?: unknown;
+        /**
+          * The color variant of the radio button.
+          * @default 'default'
+         */
+        "variant": 'default' | 'neutral' | 'light';
+    }
+    interface ScxRadioGroup {
+        /**
+          * If `true`, the radios can be deselected.
+          * @default false
+         */
+        "allowEmptySelection": boolean;
+        /**
+          * The size variant of the radio group. With hug each button accords its size to its content.
+          * @default 'fill'
+         */
+        "contain": 'fill' | 'hug';
+        /**
+          * The name of the control, which is submitted with the form data.
+          * @default this.inputId
+         */
+        "name": string;
+        /**
+          * The size of the radio buttons.
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * The value of the radio group.
+         */
+        "value"?: unknown | null;
+        /**
+          * The color variant of the radio group.
+          * @default 'default'
+         */
+        "variant": 'default' | 'neutral' | 'light';
+    }
     /**
      * Root Component (Application Shell)
      * Responsibilities:
@@ -31,6 +174,23 @@ export namespace Components {
         "apiUrl": string;
     }
     /**
+     * Tabulator Example Component
+     * Demonstrates how to use Tabulator with custom styling and sorting.
+     * Features:
+     * - Custom theme using tabulator-theme mixin
+     * - Sortable columns (click headers)
+     * - Movable rows (drag and drop)
+     * - Sample data with multiple types
+     * - Responsive layout
+     * - Pagination
+     * Usage:
+     * ```html
+     * <scx-tabulator-example></scx-tabulator-example>
+     * ```
+     */
+    interface ScxTabulatorExample {
+    }
+    /**
      * Outbound Manager Application Component
      * Demonstrates core patterns for SmileCX applications:
      * - Service access via container getter (NOT
@@ -46,7 +206,127 @@ export namespace Components {
     interface SmilecxOutboundManager {
     }
 }
+export interface ScxRadioButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScxRadioButtonElement;
+}
+export interface ScxRadioGroupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScxRadioGroupElement;
+}
 declare global {
+    interface HTMLScxEmptyStateElement extends Components.ScxEmptyState, HTMLStencilElement {
+    }
+    var HTMLScxEmptyStateElement: {
+        prototype: HTMLScxEmptyStateElement;
+        new (): HTMLScxEmptyStateElement;
+    };
+    /**
+     * Example Components Showcase
+     * Dynamic tab-based documentation component using Shoelace tabs.
+     * Features:
+     * - Shoelace sl-tab-group for native tab UI
+     * - Easy to add new components (just add to tabs array)
+     * - Live interactive examples
+     * - Code snippets with syntax highlighting
+     * - API documentation tables
+     * Adding a new component:
+     * 1. Add new object to `tabs` array in componentWillLoad()
+     * 2. Create render method for content
+     * 3. Done! Tab is automatically rendered
+     * Usage:
+     * ```html
+     * <scx-example-components></scx-example-components>
+     * ```
+     */
+    interface HTMLScxExampleComponentsElement extends Components.ScxExampleComponents, HTMLStencilElement {
+    }
+    var HTMLScxExampleComponentsElement: {
+        prototype: HTMLScxExampleComponentsElement;
+        new (): HTMLScxExampleComponentsElement;
+    };
+    interface HTMLScxIconsExampleElement extends Components.ScxIconsExample, HTMLStencilElement {
+    }
+    var HTMLScxIconsExampleElement: {
+        prototype: HTMLScxIconsExampleElement;
+        new (): HTMLScxIconsExampleElement;
+    };
+    /**
+     * Example Modal Component
+     * Demonstrates how to create a modal content component that works with the Modal Service.
+     * Key Patterns:
+     * - Receives `modal` prop from Modal Service
+     * - Calls `modal.close()` with appropriate data
+     * - Uses confirm/dismiss flags to indicate user action
+     * - Follows standard modal structure with modal-wrapper, modal-head, modal-content, modal-footer
+     * Usage:
+     * ```typescript
+     * import { starter } from '../../di/containers';
+     * const modal = starter.modal;
+     * modal.create({
+     *   component: 'scx-example-modal',
+     *   width: '500px',
+     *   dismissOnEsc: true,
+     *   backdropDismiss: true,
+     *   componentProps: {
+     *     modalTitle: 'Confirm Action',
+     *     message: 'Are you sure you want to proceed?'
+     *   }
+     * });
+     * modal.onDismiss((data) => {
+     *   if (data.confirm) {
+     *     console.log('User confirmed');
+     *   } else {
+     *     console.log('User cancelled');
+     *   }
+     * });
+     * modal.show();
+     * ```
+     */
+    interface HTMLScxModalExampleElement extends Components.ScxModalExample, HTMLStencilElement {
+    }
+    var HTMLScxModalExampleElement: {
+        prototype: HTMLScxModalExampleElement;
+        new (): HTMLScxModalExampleElement;
+    };
+    interface HTMLScxRadioButtonElementEventMap {
+        "smStyle": StyleEventDetail;
+        "smSelect": { checked: boolean; value: unknown };
+        "smDeselect": void;
+        "smFocus": void;
+        "smBlur": void;
+    }
+    interface HTMLScxRadioButtonElement extends Components.ScxRadioButton, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScxRadioButtonElementEventMap>(type: K, listener: (this: HTMLScxRadioButtonElement, ev: ScxRadioButtonCustomEvent<HTMLScxRadioButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScxRadioButtonElementEventMap>(type: K, listener: (this: HTMLScxRadioButtonElement, ev: ScxRadioButtonCustomEvent<HTMLScxRadioButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScxRadioButtonElement: {
+        prototype: HTMLScxRadioButtonElement;
+        new (): HTMLScxRadioButtonElement;
+    };
+    interface HTMLScxRadioGroupElementEventMap {
+        "smChange": RadioGroupChangeEventDetail;
+    }
+    interface HTMLScxRadioGroupElement extends Components.ScxRadioGroup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScxRadioGroupElementEventMap>(type: K, listener: (this: HTMLScxRadioGroupElement, ev: ScxRadioGroupCustomEvent<HTMLScxRadioGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScxRadioGroupElementEventMap>(type: K, listener: (this: HTMLScxRadioGroupElement, ev: ScxRadioGroupCustomEvent<HTMLScxRadioGroupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScxRadioGroupElement: {
+        prototype: HTMLScxRadioGroupElement;
+        new (): HTMLScxRadioGroupElement;
+    };
     /**
      * Root Component (Application Shell)
      * Responsibilities:
@@ -69,6 +349,27 @@ declare global {
         new (): HTMLScxRootElement;
     };
     /**
+     * Tabulator Example Component
+     * Demonstrates how to use Tabulator with custom styling and sorting.
+     * Features:
+     * - Custom theme using tabulator-theme mixin
+     * - Sortable columns (click headers)
+     * - Movable rows (drag and drop)
+     * - Sample data with multiple types
+     * - Responsive layout
+     * - Pagination
+     * Usage:
+     * ```html
+     * <scx-tabulator-example></scx-tabulator-example>
+     * ```
+     */
+    interface HTMLScxTabulatorExampleElement extends Components.ScxTabulatorExample, HTMLStencilElement {
+    }
+    var HTMLScxTabulatorExampleElement: {
+        prototype: HTMLScxTabulatorExampleElement;
+        new (): HTMLScxTabulatorExampleElement;
+    };
+    /**
      * Outbound Manager Application Component
      * Demonstrates core patterns for SmileCX applications:
      * - Service access via container getter (NOT
@@ -88,11 +389,179 @@ declare global {
         new (): HTMLSmilecxOutboundManagerElement;
     };
     interface HTMLElementTagNameMap {
+        "scx-empty-state": HTMLScxEmptyStateElement;
+        "scx-example-components": HTMLScxExampleComponentsElement;
+        "scx-icons-example": HTMLScxIconsExampleElement;
+        "scx-modal-example": HTMLScxModalExampleElement;
+        "scx-radio-button": HTMLScxRadioButtonElement;
+        "scx-radio-group": HTMLScxRadioGroupElement;
         "scx-root": HTMLScxRootElement;
+        "scx-tabulator-example": HTMLScxTabulatorExampleElement;
         "smilecx-outbound-manager": HTMLSmilecxOutboundManagerElement;
     }
 }
 declare namespace LocalJSX {
+    interface ScxEmptyState {
+        "esTitle"?: string;
+        "icon": string;
+        "label"?: string;
+    }
+    /**
+     * Example Components Showcase
+     * Dynamic tab-based documentation component using Shoelace tabs.
+     * Features:
+     * - Shoelace sl-tab-group for native tab UI
+     * - Easy to add new components (just add to tabs array)
+     * - Live interactive examples
+     * - Code snippets with syntax highlighting
+     * - API documentation tables
+     * Adding a new component:
+     * 1. Add new object to `tabs` array in componentWillLoad()
+     * 2. Create render method for content
+     * 3. Done! Tab is automatically rendered
+     * Usage:
+     * ```html
+     * <scx-example-components></scx-example-components>
+     * ```
+     */
+    interface ScxExampleComponents {
+    }
+    interface ScxIconsExample {
+    }
+    /**
+     * Example Modal Component
+     * Demonstrates how to create a modal content component that works with the Modal Service.
+     * Key Patterns:
+     * - Receives `modal` prop from Modal Service
+     * - Calls `modal.close()` with appropriate data
+     * - Uses confirm/dismiss flags to indicate user action
+     * - Follows standard modal structure with modal-wrapper, modal-head, modal-content, modal-footer
+     * Usage:
+     * ```typescript
+     * import { starter } from '../../di/containers';
+     * const modal = starter.modal;
+     * modal.create({
+     *   component: 'scx-example-modal',
+     *   width: '500px',
+     *   dismissOnEsc: true,
+     *   backdropDismiss: true,
+     *   componentProps: {
+     *     modalTitle: 'Confirm Action',
+     *     message: 'Are you sure you want to proceed?'
+     *   }
+     * });
+     * modal.onDismiss((data) => {
+     *   if (data.confirm) {
+     *     console.log('User confirmed');
+     *   } else {
+     *     console.log('User cancelled');
+     *   }
+     * });
+     * modal.show();
+     * ```
+     */
+    interface ScxModalExample {
+        /**
+          * Modal message (optional) Passed via componentProps
+          * @default 'This is an example modal component.'
+         */
+        "message"?: string;
+        /**
+          * Modal service reference Automatically injected by Modal Service
+         */
+        "modal": IModal;
+        /**
+          * Modal title (optional) Passed via componentProps
+          * @default 'Example Modal'
+         */
+        "modalTitle"?: string;
+    }
+    interface ScxRadioButton {
+        /**
+          * If `true`, the radio is selected.
+          * @default false
+         */
+        "checked"?: boolean;
+        /**
+          * If `true`, the user cannot interact with the radio.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The name of the control, which is submitted with the form data.
+          * @default this.inputId
+         */
+        "name"?: string;
+        /**
+          * Emitted when the radio button loses focus.
+         */
+        "onSmBlur"?: (event: ScxRadioButtonCustomEvent<void>) => void;
+        /**
+          * Emitted when a checked radio button is deselected.
+         */
+        "onSmDeselect"?: (event: ScxRadioButtonCustomEvent<void>) => void;
+        /**
+          * Emitted when the radio button gains focus.
+         */
+        "onSmFocus"?: (event: ScxRadioButtonCustomEvent<void>) => void;
+        /**
+          * Emitted when the radio button is selected.
+         */
+        "onSmSelect"?: (event: ScxRadioButtonCustomEvent<{ checked: boolean; value: unknown }>) => void;
+        /**
+          * Emitted when the styles change.
+         */
+        "onSmStyle"?: (event: ScxRadioButtonCustomEvent<StyleEventDetail>) => void;
+        /**
+          * The size of the radio button.
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * The value of the radio button.
+         */
+        "value"?: unknown;
+        /**
+          * The color variant of the radio button.
+          * @default 'default'
+         */
+        "variant"?: 'default' | 'neutral' | 'light';
+    }
+    interface ScxRadioGroup {
+        /**
+          * If `true`, the radios can be deselected.
+          * @default false
+         */
+        "allowEmptySelection"?: boolean;
+        /**
+          * The size variant of the radio group. With hug each button accords its size to its content.
+          * @default 'fill'
+         */
+        "contain"?: 'fill' | 'hug';
+        /**
+          * The name of the control, which is submitted with the form data.
+          * @default this.inputId
+         */
+        "name"?: string;
+        /**
+          * Emitted when the value has changed.
+         */
+        "onSmChange"?: (event: ScxRadioGroupCustomEvent<RadioGroupChangeEventDetail>) => void;
+        /**
+          * The size of the radio buttons.
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * The value of the radio group.
+         */
+        "value"?: unknown | null;
+        /**
+          * The color variant of the radio group.
+          * @default 'default'
+         */
+        "variant"?: 'default' | 'neutral' | 'light';
+    }
     /**
      * Root Component (Application Shell)
      * Responsibilities:
@@ -118,6 +587,23 @@ declare namespace LocalJSX {
         "apiUrl"?: string;
     }
     /**
+     * Tabulator Example Component
+     * Demonstrates how to use Tabulator with custom styling and sorting.
+     * Features:
+     * - Custom theme using tabulator-theme mixin
+     * - Sortable columns (click headers)
+     * - Movable rows (drag and drop)
+     * - Sample data with multiple types
+     * - Responsive layout
+     * - Pagination
+     * Usage:
+     * ```html
+     * <scx-tabulator-example></scx-tabulator-example>
+     * ```
+     */
+    interface ScxTabulatorExample {
+    }
+    /**
      * Outbound Manager Application Component
      * Demonstrates core patterns for SmileCX applications:
      * - Service access via container getter (NOT
@@ -133,7 +619,14 @@ declare namespace LocalJSX {
     interface SmilecxOutboundManager {
     }
     interface IntrinsicElements {
+        "scx-empty-state": ScxEmptyState;
+        "scx-example-components": ScxExampleComponents;
+        "scx-icons-example": ScxIconsExample;
+        "scx-modal-example": ScxModalExample;
+        "scx-radio-button": ScxRadioButton;
+        "scx-radio-group": ScxRadioGroup;
         "scx-root": ScxRoot;
+        "scx-tabulator-example": ScxTabulatorExample;
         "smilecx-outbound-manager": SmilecxOutboundManager;
     }
 }
@@ -141,6 +634,62 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "scx-empty-state": LocalJSX.ScxEmptyState & JSXBase.HTMLAttributes<HTMLScxEmptyStateElement>;
+            /**
+             * Example Components Showcase
+             * Dynamic tab-based documentation component using Shoelace tabs.
+             * Features:
+             * - Shoelace sl-tab-group for native tab UI
+             * - Easy to add new components (just add to tabs array)
+             * - Live interactive examples
+             * - Code snippets with syntax highlighting
+             * - API documentation tables
+             * Adding a new component:
+             * 1. Add new object to `tabs` array in componentWillLoad()
+             * 2. Create render method for content
+             * 3. Done! Tab is automatically rendered
+             * Usage:
+             * ```html
+             * <scx-example-components></scx-example-components>
+             * ```
+             */
+            "scx-example-components": LocalJSX.ScxExampleComponents & JSXBase.HTMLAttributes<HTMLScxExampleComponentsElement>;
+            "scx-icons-example": LocalJSX.ScxIconsExample & JSXBase.HTMLAttributes<HTMLScxIconsExampleElement>;
+            /**
+             * Example Modal Component
+             * Demonstrates how to create a modal content component that works with the Modal Service.
+             * Key Patterns:
+             * - Receives `modal` prop from Modal Service
+             * - Calls `modal.close()` with appropriate data
+             * - Uses confirm/dismiss flags to indicate user action
+             * - Follows standard modal structure with modal-wrapper, modal-head, modal-content, modal-footer
+             * Usage:
+             * ```typescript
+             * import { starter } from '../../di/containers';
+             * const modal = starter.modal;
+             * modal.create({
+             *   component: 'scx-example-modal',
+             *   width: '500px',
+             *   dismissOnEsc: true,
+             *   backdropDismiss: true,
+             *   componentProps: {
+             *     modalTitle: 'Confirm Action',
+             *     message: 'Are you sure you want to proceed?'
+             *   }
+             * });
+             * modal.onDismiss((data) => {
+             *   if (data.confirm) {
+             *     console.log('User confirmed');
+             *   } else {
+             *     console.log('User cancelled');
+             *   }
+             * });
+             * modal.show();
+             * ```
+             */
+            "scx-modal-example": LocalJSX.ScxModalExample & JSXBase.HTMLAttributes<HTMLScxModalExampleElement>;
+            "scx-radio-button": LocalJSX.ScxRadioButton & JSXBase.HTMLAttributes<HTMLScxRadioButtonElement>;
+            "scx-radio-group": LocalJSX.ScxRadioGroup & JSXBase.HTMLAttributes<HTMLScxRadioGroupElement>;
             /**
              * Root Component (Application Shell)
              * Responsibilities:
@@ -157,6 +706,22 @@ declare module "@stencil/core" {
              * ```
              */
             "scx-root": LocalJSX.ScxRoot & JSXBase.HTMLAttributes<HTMLScxRootElement>;
+            /**
+             * Tabulator Example Component
+             * Demonstrates how to use Tabulator with custom styling and sorting.
+             * Features:
+             * - Custom theme using tabulator-theme mixin
+             * - Sortable columns (click headers)
+             * - Movable rows (drag and drop)
+             * - Sample data with multiple types
+             * - Responsive layout
+             * - Pagination
+             * Usage:
+             * ```html
+             * <scx-tabulator-example></scx-tabulator-example>
+             * ```
+             */
+            "scx-tabulator-example": LocalJSX.ScxTabulatorExample & JSXBase.HTMLAttributes<HTMLScxTabulatorExampleElement>;
             /**
              * Outbound Manager Application Component
              * Demonstrates core patterns for SmileCX applications:

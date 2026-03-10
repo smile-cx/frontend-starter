@@ -1,0 +1,11 @@
+/**
+ * Example Modal Styles
+ *
+ * Uses modal mixin for standardized modal structure.
+ */
+
+@use '../../../styles/mixins/_modal' as modal;
+
+:host {
+  @include modal.scx-modal();
+}
