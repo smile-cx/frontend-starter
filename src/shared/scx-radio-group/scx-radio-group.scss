@@ -1,0 +1,38 @@
+:host {
+  display: flex;
+  position: relative;
+  background-color: var(--sl-color-bg0);
+  border-radius: var(--sl-border-radius-medium);
+  border: var(--sl-border-base);
+  justify-content: center;
+  gap: var(--sl-spacing-2x-small);
+  padding: var(--sl-spacing-3x-small) !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+:host([contain='hug']) {
+  width: max-content;
+}
+
+:host([variant='neutral']) {
+  background-color: var(--sl-border-color-base);
+  border: 1px solid var(--sl-border-color-base);
+}
+
+:host([variant='light']) {
+  background-color: var(--sl-color-bg0);
+  border: 1px solid var(--sl-border-color-base);
+}
+
+slot::slotted(*) {
+  width: var(--slot-width, 100%);
+  height: var(--slot-height, 100%);
+}
+
+:host([contain='hug']) slot::slotted(*) {
+  --slot-width: auto;
+  --slot-height: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+}

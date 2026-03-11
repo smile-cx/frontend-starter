@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build)",
+      "Bash(/tmp/tabulator-tab-config.txt:*)",
+      "Bash(sed -i '' '68 a      },      {        id: ''''tabulator'''',        label: ''''Tabulator Tables'''',        renderContent: \\(\\) => this.renderTabulatorTab\\(\\),:*)",
+      "Bash(git checkout src/shared/scx-example-components/scx-example-components.tsx)",
+      "Bash(node -e \"JSON.parse\\(require\\(''fs''\\).readFileSync\\(''package.json'', ''utf8''\\)\\); console.log\\(''✓ package.json is valid''\\)\")",
+      "Bash(npm run)",
+      "WebFetch(domain:smart-cdn.app.covisian.com)",
+      "Bash(git commit:*)",
+      "Bash(git add -A)"
+    ]
+  }
+}

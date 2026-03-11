@@ -4,6 +4,9 @@ import { outboundModule } from '../apps/outbound-manager/outbound.module';
 import { OUTBOUND_TYPES } from '../apps/outbound-manager/outbound.types';
 import { createApiModule } from '../libs/api/api.module';
 import { loggerModule } from '../libs/logger/logger.module';
+import type { IModal } from '../libs/modal/modal.interface';
+import { modalModule } from '../libs/modal/modal.module';
+import { MODAL_TYPES } from './types';
 
 /**
  * Starter Container
@@ -69,7 +72,11 @@ export class StarterContainer extends Container {
     this.load(apiModule);
     console.log('API module loaded');
 
-    // 3. Load Outbound module (depends on Logger + API)
+    // 3. Load Modal module (no dependencies)
+    this.load(modalModule);
+    console.log('Modal module loaded');
+
+    // 4. Load Outbound module (depends on Logger + API)
     this.load(outboundModule);
     console.log('Outbound module loaded');
 
@@ -94,5 +101,29 @@ export class StarterContainer extends Container {
    */
   get outbound(): IOutboundService {
     return this.get<IOutboundService>(OUTBOUND_TYPES.OutboundService);
+  }
+
+  /**
+   * Get Modal service instance
+   *
+   * Returns a new modal instance (transient scope).
+   * Each call to this getter creates a fresh modal instance.
+   *
+   * @returns IModal instance
+   *
+   * @example
+   * const modal = starter.modal;
+   * modal.create({
+   *   component: 'my-modal-content',
+   *   width: '500px',
+   *   dismissOnEsc: true,
+   * });
+   * modal.onDismiss((data) => {
+   *   console.log('Modal closed:', data);
+   * });
+   * modal.show();
+   */
+  get modal(): IModal {
+    return this.get<IModal>(MODAL_TYPES.Modal);
   }
 }

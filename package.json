@@ -24,7 +24,8 @@
     "type-check": "tsc --noEmit",
     "clean": "rimraf dist www/.cache .stencil",
     "commit": "cz",
-    "prepare": "husky"
+    "prepare": "husky",
+    "kill-dev": "lsof -ti:3336 | xargs kill -9 2>/dev/null || true; pkill -f \"stencil.*--dev\" 2>/dev/null || true; echo \"Dev processes killed\""
   },
   "dependencies": {
     "@stencil/core": "^4.38.3",
@@ -33,7 +34,8 @@
     "inversify": "^7.10.4",
     "jsonref": "^9.0.2",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "tabulator-tables": "^6.4.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.7.0",

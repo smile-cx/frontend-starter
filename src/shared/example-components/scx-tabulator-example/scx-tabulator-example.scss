@@ -1,0 +1,67 @@
+/**
+ * Tabulator Example Styles
+ *
+ * Imports Tabulator base CSS and applies custom theme mixin
+ */
+
+@use '../../../styles/mixins/_tabulator' as tabulator;
+@import '~tabulator-tables/dist/css/tabulator.min.css';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.tabulator-example-container {
+  width: 100%;
+  padding: var(--sl-spacing-medium, 16px);
+
+  // Apply custom tabulator theme mixin
+  @include tabulator.tabulator-theme;
+
+  .table-container {
+    width: 100%;
+    height: 450px;
+
+    // Drag handle cursor styling
+    ::slotted(sl-icon.drag-handle),
+    sl-icon.drag-handle,
+    .drag-handle {
+      cursor: grab !important;
+    }
+
+    .row-handle-cell {
+      cursor: grab !important;
+
+      &:active {
+        cursor: grabbing !important;
+      }
+    }
+
+    // When dragging, force grabbing cursor everywhere
+    &.is-dragging {
+      cursor: grabbing !important;
+
+      * {
+        cursor: grabbing !important;
+      }
+
+      // Override hover effects during drag
+      .tabulator-row {
+        cursor: grabbing !important;
+
+        &:hover {
+          cursor: grabbing !important;
+        }
+      }
+
+      .tabulator-cell {
+        cursor: grabbing !important;
+      }
+
+      .row-handle-cell {
+        cursor: grabbing !important;
+      }
+    }
+  }
+}

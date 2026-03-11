@@ -33,3 +33,10 @@ export const API_TYPES = {
   ApiConf: Symbol.for('ApiConf'),
   ApiFetch: Symbol.for('ApiFetch'),
 };
+
+/**
+ * Modal Module Symbols
+ */
+export const MODAL_TYPES = {
+  Modal: Symbol.for('Modal'),
+};
