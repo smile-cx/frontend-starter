@@ -37,6 +37,26 @@ export namespace Components {
      */
     interface ScxExampleComponents {
     }
+    /**
+     * Range Example Component
+     * Demonstrates various use cases of the Shoelace sl-range component with different configurations.
+     * Features:
+     * - Basic range slider with default settings
+     * - Custom min, max, and step values
+     * - Range with labels and help text
+     * - Range with tooltip for real-time value display
+     * - Disabled state demonstration
+     * - Multiple ranges with different configurations
+     * - Real-time value updates
+     * Usage:
+     * ```html
+     * <scx-example-range></scx-example-range>
+     * ```
+     * sl-range Documentation:
+     * https://shoelace.style/components/range
+     */
+    interface ScxExampleRange {
+    }
     interface ScxIconsExample {
     }
     /**
@@ -245,6 +265,30 @@ declare global {
         prototype: HTMLScxExampleComponentsElement;
         new (): HTMLScxExampleComponentsElement;
     };
+    /**
+     * Range Example Component
+     * Demonstrates various use cases of the Shoelace sl-range component with different configurations.
+     * Features:
+     * - Basic range slider with default settings
+     * - Custom min, max, and step values
+     * - Range with labels and help text
+     * - Range with tooltip for real-time value display
+     * - Disabled state demonstration
+     * - Multiple ranges with different configurations
+     * - Real-time value updates
+     * Usage:
+     * ```html
+     * <scx-example-range></scx-example-range>
+     * ```
+     * sl-range Documentation:
+     * https://shoelace.style/components/range
+     */
+    interface HTMLScxExampleRangeElement extends Components.ScxExampleRange, HTMLStencilElement {
+    }
+    var HTMLScxExampleRangeElement: {
+        prototype: HTMLScxExampleRangeElement;
+        new (): HTMLScxExampleRangeElement;
+    };
     interface HTMLScxIconsExampleElement extends Components.ScxIconsExample, HTMLStencilElement {
     }
     var HTMLScxIconsExampleElement: {
@@ -391,6 +435,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "scx-empty-state": HTMLScxEmptyStateElement;
         "scx-example-components": HTMLScxExampleComponentsElement;
+        "scx-example-range": HTMLScxExampleRangeElement;
         "scx-icons-example": HTMLScxIconsExampleElement;
         "scx-modal-example": HTMLScxModalExampleElement;
         "scx-radio-button": HTMLScxRadioButtonElement;
@@ -425,6 +470,26 @@ declare namespace LocalJSX {
      * ```
      */
     interface ScxExampleComponents {
+    }
+    /**
+     * Range Example Component
+     * Demonstrates various use cases of the Shoelace sl-range component with different configurations.
+     * Features:
+     * - Basic range slider with default settings
+     * - Custom min, max, and step values
+     * - Range with labels and help text
+     * - Range with tooltip for real-time value display
+     * - Disabled state demonstration
+     * - Multiple ranges with different configurations
+     * - Real-time value updates
+     * Usage:
+     * ```html
+     * <scx-example-range></scx-example-range>
+     * ```
+     * sl-range Documentation:
+     * https://shoelace.style/components/range
+     */
+    interface ScxExampleRange {
     }
     interface ScxIconsExample {
     }
@@ -621,6 +686,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "scx-empty-state": ScxEmptyState;
         "scx-example-components": ScxExampleComponents;
+        "scx-example-range": ScxExampleRange;
         "scx-icons-example": ScxIconsExample;
         "scx-modal-example": ScxModalExample;
         "scx-radio-button": ScxRadioButton;
@@ -654,6 +720,25 @@ declare module "@stencil/core" {
              * ```
              */
             "scx-example-components": LocalJSX.ScxExampleComponents & JSXBase.HTMLAttributes<HTMLScxExampleComponentsElement>;
+            /**
+             * Range Example Component
+             * Demonstrates various use cases of the Shoelace sl-range component with different configurations.
+             * Features:
+             * - Basic range slider with default settings
+             * - Custom min, max, and step values
+             * - Range with labels and help text
+             * - Range with tooltip for real-time value display
+             * - Disabled state demonstration
+             * - Multiple ranges with different configurations
+             * - Real-time value updates
+             * Usage:
+             * ```html
+             * <scx-example-range></scx-example-range>
+             * ```
+             * sl-range Documentation:
+             * https://shoelace.style/components/range
+             */
+            "scx-example-range": LocalJSX.ScxExampleRange & JSXBase.HTMLAttributes<HTMLScxExampleRangeElement>;
             "scx-icons-example": LocalJSX.ScxIconsExample & JSXBase.HTMLAttributes<HTMLScxIconsExampleElement>;
             /**
              * Example Modal Component

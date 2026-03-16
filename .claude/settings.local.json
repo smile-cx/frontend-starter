@@ -9,7 +9,8 @@
       "Bash(npm run)",
       "WebFetch(domain:smart-cdn.app.covisian.com)",
       "Bash(git commit:*)",
-      "Bash(git add -A)"
+      "Bash(git add -A)",
+      "Bash(pnpm build:*)"
     ]
   }
 }
