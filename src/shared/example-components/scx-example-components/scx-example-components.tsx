@@ -49,7 +49,11 @@ export class ScxExampleComponents implements ComponentInterface {
    */
   private tabs: TabConfig[] = [];
 
-  componentWillLoad() {
+  async componentWillLoad() {
+    // Initialize DI container if not already initialized
+    // This is needed when component is used standalone (without scx-root)
+    await starter.init({ apiBaseUrl: '' });
+
     // Initialize tabs configuration
     this.tabs = [
       {
