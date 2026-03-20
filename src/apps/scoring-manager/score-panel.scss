@@ -1,0 +1,89 @@
+.scoresDialog {
+ display: flex;
+    gap: 1rem;
+    justify-content: center;
+    height: 100%;
+    align-items: stretch;
+}
+score-panel {
+  margin: 0;
+  padding: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: calc(50% - 0.5rem);
+  .singleScorePanel {
+    height: 100%;
+  }
+}
+
+.weight {
+  font-size: 1.3rem;
+}
+.red {
+  color: red;
+}
+.green {
+  color: green;
+}
+.orange {
+  color: orange;
+}
+.score-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 15px;
+  border: 1px solid var(--sl-color-neutral-200);
+  border-radius: 5px;
+  font-weight: 700;
+
+  &__amount {
+    display: flex;
+    align-items: center;
+
+    &__value {
+      font-size: 1rem;
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      &__border {
+        border-right: 1px solid var(--sl-color-neutral-200);
+        padding: 0px 20px;
+      }
+    }
+
+    &__button {
+      font-size: 1rem;
+      padding: 0px 20px;
+    }
+  }
+}
+.score-panel-add {
+  margin-bottom: 16px;
+
+  sl-button {
+    width: 100%;
+  }
+  sl-icon {
+    font-size: 1.25rem;
+  }
+}
+
+.score-panel-body {
+  border: 1px solid var(--sl-color-neutral-200);
+  border-radius: 5px;
+  padding: 15px;
+
+  sl-icon {
+    font-size: 2rem;
+    color: var(--sl-color-primary-500);
+  }
+
+  &__empty {
+    text-align: center;
+  }
+}
