@@ -1,7 +1,13 @@
 import { Container } from 'inversify';
+import type { IMappingService } from '../apps/mapping-manager/mapping.interface';
+import { mappingModule } from '../apps/mapping-manager/mapping.module';
+import { MAPPING_TYPES } from '../apps/mapping-manager/mapping.types';
 import type { IOutboundService } from '../apps/outbound-manager/outbound.interface';
 import { outboundModule } from '../apps/outbound-manager/outbound.module';
 import { OUTBOUND_TYPES } from '../apps/outbound-manager/outbound.types';
+import { IScoringService } from '../apps/scoring-manager/scoring.interface';
+import { scoringModule } from '../apps/scoring-manager/scoring.module';
+import { SCORING_TYPES } from '../apps/scoring-manager/scoring.types';
 import { createApiModule } from '../libs/api/api.module';
 import { loggerModule } from '../libs/logger/logger.module';
 import type { IModal } from '../libs/modal/modal.interface';
@@ -61,24 +67,24 @@ export class StarterContainer extends Container {
       return;
     }
 
-    console.log('StarterContainer initializing...');
-
     // 1. Load Logger module (no dependencies)
     this.load(loggerModule);
-    console.log('Logger module loaded');
 
     // 2. Load API module with configuration
     const apiModule = createApiModule({ apiUrl: options.apiBaseUrl });
     this.load(apiModule);
-    console.log('API module loaded');
 
     // 3. Load Modal module (no dependencies)
     this.load(modalModule);
-    console.log('Modal module loaded');
 
     // 4. Load Outbound module (depends on Logger + API)
     this.load(outboundModule);
-    console.log('Outbound module loaded');
+
+    // 5. Load Mapping module (depends on Logger + API)
+    this.load(mappingModule);
+
+    // 6. Load Scoring module (depends on Logger + API)
+    this.load(scoringModule);
 
     this.initialized = true;
     console.log('StarterContainer initialized');
@@ -125,5 +131,13 @@ export class StarterContainer extends Container {
    */
   get modal(): IModal {
     return this.get<IModal>(MODAL_TYPES.Modal);
+  }
+
+  get mappingService(): IMappingService {
+    return this.get<IMappingService>(MAPPING_TYPES.MappingService);
+  }
+
+  get scoringService(): IScoringService {
+    return this.get<IScoringService>(SCORING_TYPES.ScoringService);
   }
 }

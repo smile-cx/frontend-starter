@@ -1,0 +1,111 @@
+
+@use '../../styles/mixins/_tabulator' as tabulator;
+@import '~tabulator-tables/dist/css/tabulator.min.css';
+
+
+
+
+.tabulator {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  border: var(--sl-border-base);
+    .tabulator-header {
+      border-bottom: var(--sl-border-base);
+        .tabulator-col {
+          background-color: #F1F3F7;
+        border-right: var(--sl-border-base);
+        }
+    }
+  }
+  .tabulator-row {
+    .tabulator-cell.tabulator-row-header {
+      background: transparent;
+      border-bottom: 0;
+      border-right: var(--sl-border-base);
+    }
+  }
+
+.checkbox-container {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100%; width: 100%;
+}
+  sl-checkbox {
+    position: relative;
+    margin-right: -0.5em;
+  }
+  sl-checkbox::before {
+    content: "";
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    width: 21px;
+    height: 21px;
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: -2px;
+    z-index: 1;
+  }
+  sl-checkbox[checked]::before {
+    background-color: var(--sl-color-primary-500);
+    border-color: var(--sl-color-primary-500);
+  }
+sl-checkbox[checked]::after {
+    content: "";
+    width: 3px;
+    height: 9px;
+    border-bottom: 2px solid #fff;
+    border-right: 2px solid #fff;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    z-index: 2;
+}
+
+.save-button {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vertical-cards-container {
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+}
+
+.model-inputs-row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.scoresDialog {
+  display: flex;
+  gap: 1rem;
+  .hydrated {display: flex; gap: 1rem;}
+  .singleScorePanel {
+    width: stretch;
+  }
+}
+.card-header__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  .cv-sort-cx-card {
+    display: inline-block;
+    color: var(--sl-color-primary-500);
+  }
+  h4 {margin: 0.5rem 0;}
+}
+
+

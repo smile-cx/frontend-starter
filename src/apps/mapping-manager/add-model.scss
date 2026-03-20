@@ -1,0 +1,29 @@
+
+add-model {
+  margin: 0;
+  padding: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:host .add-model-button {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.vertical-cards-container {
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+}
+
+.upload-card {
+    border: dashed;
+    border-color: #DEE2E7;
+}

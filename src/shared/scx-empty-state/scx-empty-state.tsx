@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Host, Prop, h } from '@stencil/core';
+import { Component, ComponentInterface, Host, Prop, h, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'scx-empty-state',
@@ -10,10 +10,16 @@ export class ScxEmptyState implements ComponentInterface {
   @Prop() label?: string;
   @Prop() esTitle?: string;
 
+  @Event() iconClick!: EventEmitter<void>;
+
+  private handleIconClick = () => {
+    this.iconClick.emit();
+  };
+
   render() {
     return (
       <Host>
-        <div class="icon-wrap">
+        <div class="icon-wrap" onClick={this.handleIconClick} style={{ cursor: 'pointer' }}>
           <sl-icon size="extra" name={this.icon}></sl-icon>
         </div>
         {this.esTitle ? (
