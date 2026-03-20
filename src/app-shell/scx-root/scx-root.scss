@@ -12,3 +12,17 @@
   font-size: 1.25rem;
   color: var(--sl-color-neutral-600);
 }
+
+.scoresDialog {
+  display: flex;
+  gap: 1rem;
+  .singleScorePanel {
+    width: stretch;
+  }
+}
+
+
+
+scx-radio-button {
+  padding: 6px;
+}

@@ -14,64 +14,19 @@ export class ScxRadioButton implements ComponentInterface {
 
   @Element() el!: HTMLElement;
 
-  /**
-   * The name of the control, which is submitted with the form data.
-   */
   @Prop() name: string = this.inputId;
 
-  /**
-   * If `true`, the user cannot interact with the radio.
-   */
   @Prop() disabled = false;
 
-  /**
-   * If `true`, the radio is selected.
-   */
   @Prop({ mutable: true }) checked = false;
 
-  /**
-   * The value of the radio button.
-   */
   @Prop({ mutable: true }) value?: unknown;
 
-  /**
-   * The color variant of the radio button.
-   * @internal - Inherited from parent radio-group
-   */
-  @Prop({ mutable: true }) variant: 'default' | 'neutral' | 'light' = 'default';
-
-  /**
-   * The size of the radio button.
-   * @internal - Inherited from parent radio-group, not meant to be set directly by users
-   */
-  @Prop({ mutable: true }) size: 'small' | 'medium' | 'large' = 'medium';
-
-  /**
-   * Emitted when the styles change.
-   * @internal
-   */
   @Event() smStyle!: EventEmitter<StyleEventDetail>;
 
-  /**
-   * Emitted when the radio button is selected.
-   */
   @Event() smSelect!: EventEmitter<{ checked: boolean; value: unknown }>;
 
-  /**
-   * Emitted when a checked radio button is deselected.
-   * @internal
-   */
   @Event() smDeselect!: EventEmitter<void>;
-
-  /**
-   * Emitted when the radio button gains focus.
-   */
-  @Event() smFocus!: EventEmitter<void>;
-
-  /**
-   * Emitted when the radio button loses focus.
-   */
-  @Event() smBlur!: EventEmitter<void>;
 
   @Watch('checked')
   checkedChanged(isChecked: boolean) {
@@ -93,18 +48,6 @@ export class ScxRadioButton implements ComponentInterface {
     });
   }
 
-  private onFocus = () => {
-    if (!this.disabled) {
-      this.smFocus.emit();
-    }
-  };
-
-  private onBlur = () => {
-    if (!this.disabled) {
-      this.smBlur.emit();
-    }
-  };
-
   private onClick = () => {
     if (!this.disabled && !this.checked) {
       this.checked = true;
@@ -112,15 +55,6 @@ export class ScxRadioButton implements ComponentInterface {
   };
 
   componentWillLoad() {
-    const radioGroup = this.el.closest('scx-radio-group');
-    if (radioGroup) {
-      if (radioGroup.variant) {
-        this.variant = radioGroup.variant;
-      }
-      if (radioGroup.size) {
-        this.size = radioGroup.size;
-      }
-    }
     if (this.value === undefined) {
       this.value = this.inputId;
     }
@@ -128,7 +62,7 @@ export class ScxRadioButton implements ComponentInterface {
   }
 
   render() {
-    const { inputId, disabled, checked, variant, size } = this;
+    const { inputId, disabled, checked } = this;
     const labelId = `${inputId}-lbl`;
 
     return (
@@ -146,18 +80,11 @@ export class ScxRadioButton implements ComponentInterface {
       >
         <button
           type="button"
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
           disabled={disabled}
           class={{
             checked,
             unchecked: !checked,
             disabled,
-            neutral: variant === 'neutral',
-            light: variant === 'light',
-            small: size === 'small',
-            medium: size === 'medium',
-            large: size === 'large',
           }}
         >
           <slot name="prefix"></slot>

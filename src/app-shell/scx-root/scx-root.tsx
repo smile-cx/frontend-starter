@@ -1,67 +1,95 @@
-import { Component, Host, Prop, State, h } from '@stencil/core';
+import { Component, Host, Listen, Prop, State, h } from '@stencil/core';
 import type { ComponentInterface } from '@stencil/core';
 import { starter } from '../../di/containers';
 import { tt } from '../../libs/i18n';
 
-/**
- * Root Component (Application Shell)
- *
- * Responsibilities:
- * - Initialize DI container with runtime config (API base URL)
- * - Render loading state during initialization
- * - Mount application component(s) after initialization
- *
- * **IMPORTANT**: This component handles ONLY container initialization.
- * No business logic, no service usage, no subscriptions.
- *
- * Application logic belongs in app components (smilecx-outbound-manager, etc.)
- *
- * Pattern: Shell layer (init) vs Application layer (business logic)
- *
- * Usage:
- * ```html
- * <scx-root api-url="http://localhost:3001/t/acme-corp/v1"></scx-root>
- * ```
- */
 @Component({
   tag: 'scx-root',
   styleUrl: 'scx-root.scss',
   shadow: true,
 })
 export class ScxRoot implements ComponentInterface {
-  /**
-   * API base URL for backend requests
-   * Passed to container during initialization
-   *
-   * @example
-   * // Development
-   * api-url="http://localhost:3001/t/acme-corp/v1"
-   *
-   * @example
-   * // Production
-   * api-url="https://api.smilecx.com/t/acme-corp/v1"
-   */
   @Prop() apiUrl = '';
-
-  /**
-   * Container initialization status
-   * Used to render loading state vs application
-   */
   @State() initialized = false;
+  @State() selectedRadioValue = 'mapping';
+  @State() lastModalResult = 'Not opened yet';
 
-  /**
-   * Initialize DI container before rendering app
-   */
   async componentWillLoad() {
     await starter.init({ apiBaseUrl: this.apiUrl });
     this.initialized = true;
   }
+  private handleRadioChange = (event: CustomEvent) => {
+    this.selectedRadioValue = event.detail.value;
+  };
+
+  @Listen('changePage')
+  handleAddField(event: CustomEvent<string>) {
+    this.selectedRadioValue = event.detail;
+  }
+
+  renderContent = () => {
+    switch (this.selectedRadioValue) {
+      case 'mapping':
+        // return <movable-rows-table></movable-rows-table>;
+        return <add-model></add-model>;
+      case 'scoring':
+        return (
+          <div class="scoresDialog">
+            <score-panel scope="Contactability"></score-panel>
+            <score-panel scope="Propensity"></score-panel>
+          </div>
+        );
+      case 'options':
+        return <p>options.</p>;
+      default:
+        return null;
+    }
+  };
+  private openModal = () => {
+    const modal = starter.modal;
+
+    modal.create({
+      component: 'scx-modal-example',
+      width: '90%',
+      height: '90%',
+      dismissOnEsc: true,
+      backdropDismiss: true,
+      componentProps: {
+        modalTitle: 'Example Modal',
+        message: 'This is an example modal created with the Modal Service. Try clicking the buttons or pressing ESC!',
+      },
+    });
+
+    modal.onDismiss((data) => {
+      if (data.confirm) {
+        this.lastModalResult = '✅ User confirmed';
+      } else if (data.dismiss) {
+        this.lastModalResult = '❌ User dismissed';
+      }
+    });
+
+    modal.show();
+  };
 
   render() {
     return (
       <Host>
         {this.initialized ? (
-          <smilecx-outbound-manager></smilecx-outbound-manager>
+          <div>
+            <sl-button onClick={this.openModal}>Open Modal</sl-button>
+            <p class="result">Last result: {this.lastModalResult}</p>
+            {/* <scx-radio-group
+              value={this.selectedRadioValue}
+              size="medium"
+              variant="light"
+              onSmChange={this.handleRadioChange}
+            >
+              <scx-radio-button value="mapping">Mapping</scx-radio-button>
+              <scx-radio-button value="scoring">Scoring</scx-radio-button>
+              <scx-radio-button value="options">Options</scx-radio-button>
+            </scx-radio-group>
+            {this.renderContent()} */}
+          </div>
         ) : (
           <div class="loading">{tt('SM.SHELL.INITIALIZING')}</div>
         )}

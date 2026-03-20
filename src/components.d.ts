@@ -5,13 +5,40 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { FieldToSend, Score } from "./apps/scoring-manager/scoring.interface";
 import { IModal } from "./libs/modal";
 import { StyleEventDetail } from "./shared/scx-radio-group/scx-radio-button/scx-radio-button";
 import { RadioGroupChangeEventDetail } from "./shared/scx-radio-group/scx-radio-group";
+export { FieldToSend, Score } from "./apps/scoring-manager/scoring.interface";
 export { IModal } from "./libs/modal";
 export { StyleEventDetail } from "./shared/scx-radio-group/scx-radio-button/scx-radio-button";
 export { RadioGroupChangeEventDetail } from "./shared/scx-radio-group/scx-radio-group";
 export namespace Components {
+    interface AddModel {
+    }
+    interface AddScore {
+        "addNewField"?: boolean;
+        /**
+          * @default {     id: 0,     name: '',     type: '',     weight: 0,     scores: [],   }
+         */
+        "field": FieldToSend;
+        /**
+          * @default 0
+         */
+        "fieldIndex": number;
+        "scope": 'Contactability' | 'Propensity';
+    }
+    interface MovableRowsTable {
+    }
+    interface ScoreField {
+        "editMode": boolean;
+        "field": FieldToSend;
+        "nScore": number;
+        "switch"?: 1 | 3 | null;
+    }
+    interface ScorePanel {
+        "scope": 'Contactability' | 'Propensity';
+    }
     interface ScxEmptyState {
         "esTitle"?: string;
         "icon": string;
@@ -36,26 +63,6 @@ export namespace Components {
      * ```
      */
     interface ScxExampleComponents {
-    }
-    /**
-     * Range Example Component
-     * Demonstrates various use cases of the Shoelace sl-range component with different configurations.
-     * Features:
-     * - Basic range slider with default settings
-     * - Custom min, max, and step values
-     * - Range with labels and help text
-     * - Range with tooltip for real-time value display
-     * - Disabled state demonstration
-     * - Multiple ranges with different configurations
-     * - Real-time value updates
-     * Usage:
-     * ```html
-     * <scx-example-range></scx-example-range>
-     * ```
-     * sl-range Documentation:
-     * https://shoelace.style/components/range
-     */
-    interface ScxExampleRange {
     }
     interface ScxIconsExample {
     }
@@ -93,50 +100,29 @@ export namespace Components {
      */
     interface ScxModalExample {
         /**
-          * Modal message (optional) Passed via componentProps
           * @default 'This is an example modal component.'
          */
         "message": string;
-        /**
-          * Modal service reference Automatically injected by Modal Service
-         */
         "modal": IModal;
         /**
-          * Modal title (optional) Passed via componentProps
           * @default 'Example Modal'
          */
         "modalTitle": string;
     }
     interface ScxRadioButton {
         /**
-          * If `true`, the radio is selected.
           * @default false
          */
         "checked": boolean;
         /**
-          * If `true`, the user cannot interact with the radio.
           * @default false
          */
         "disabled": boolean;
         /**
-          * The name of the control, which is submitted with the form data.
           * @default this.inputId
          */
         "name": string;
-        /**
-          * The size of the radio button.
-          * @default 'medium'
-         */
-        "size": 'small' | 'medium' | 'large';
-        /**
-          * The value of the radio button.
-         */
         "value"?: unknown;
-        /**
-          * The color variant of the radio button.
-          * @default 'default'
-         */
-        "variant": 'default' | 'neutral' | 'light';
     }
     interface ScxRadioGroup {
         /**
@@ -169,26 +155,8 @@ export namespace Components {
          */
         "variant": 'default' | 'neutral' | 'light';
     }
-    /**
-     * Root Component (Application Shell)
-     * Responsibilities:
-     * - Initialize DI container with runtime config (API base URL)
-     * - Render loading state during initialization
-     * - Mount application component(s) after initialization
-     * **IMPORTANT**: This component handles ONLY container initialization.
-     * No business logic, no service usage, no subscriptions.
-     * Application logic belongs in app components (smilecx-outbound-manager, etc.)
-     * Pattern: Shell layer (init) vs Application layer (business logic)
-     * Usage:
-     * ```html
-     * <scx-root api-url="http://localhost:3001/t/acme-corp/v1"></scx-root>
-     * ```
-     */
     interface ScxRoot {
         /**
-          * API base URL for backend requests Passed to container during initialization
-          * @example // Development api-url="http://localhost:3001/t/acme-corp/v1"
-          * @example // Production api-url="https://api.smilecx.com/t/acme-corp/v1"
           * @default ''
          */
         "apiUrl": string;
@@ -226,6 +194,22 @@ export namespace Components {
     interface SmilecxOutboundManager {
     }
 }
+export interface AddScoreCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLAddScoreElement;
+}
+export interface MovableRowsTableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMovableRowsTableElement;
+}
+export interface ScoreFieldCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScoreFieldElement;
+}
+export interface ScxEmptyStateCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScxEmptyStateElement;
+}
 export interface ScxRadioButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScxRadioButtonElement;
@@ -235,7 +219,86 @@ export interface ScxRadioGroupCustomEvent<T> extends CustomEvent<T> {
     target: HTMLScxRadioGroupElement;
 }
 declare global {
+    interface HTMLAddModelElement extends Components.AddModel, HTMLStencilElement {
+    }
+    var HTMLAddModelElement: {
+        prototype: HTMLAddModelElement;
+        new (): HTMLAddModelElement;
+    };
+    interface HTMLAddScoreElementEventMap {
+        "addField": FieldToSend;
+        "deleteField": number;
+        "editField": { field: FieldToSend; key: number };
+        "closeNewDialog": any;
+    }
+    interface HTMLAddScoreElement extends Components.AddScore, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLAddScoreElementEventMap>(type: K, listener: (this: HTMLAddScoreElement, ev: AddScoreCustomEvent<HTMLAddScoreElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLAddScoreElementEventMap>(type: K, listener: (this: HTMLAddScoreElement, ev: AddScoreCustomEvent<HTMLAddScoreElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLAddScoreElement: {
+        prototype: HTMLAddScoreElement;
+        new (): HTMLAddScoreElement;
+    };
+    interface HTMLMovableRowsTableElementEventMap {
+        "changePage": string;
+    }
+    interface HTMLMovableRowsTableElement extends Components.MovableRowsTable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLMovableRowsTableElementEventMap>(type: K, listener: (this: HTMLMovableRowsTableElement, ev: MovableRowsTableCustomEvent<HTMLMovableRowsTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLMovableRowsTableElementEventMap>(type: K, listener: (this: HTMLMovableRowsTableElement, ev: MovableRowsTableCustomEvent<HTMLMovableRowsTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLMovableRowsTableElement: {
+        prototype: HTMLMovableRowsTableElement;
+        new (): HTMLMovableRowsTableElement;
+    };
+    interface HTMLScoreFieldElementEventMap {
+        "editScore": Score;
+        "deleteScore": number;
+        "editCheck": 1 | 3 | null;
+    }
+    interface HTMLScoreFieldElement extends Components.ScoreField, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScoreFieldElementEventMap>(type: K, listener: (this: HTMLScoreFieldElement, ev: ScoreFieldCustomEvent<HTMLScoreFieldElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScoreFieldElementEventMap>(type: K, listener: (this: HTMLScoreFieldElement, ev: ScoreFieldCustomEvent<HTMLScoreFieldElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScoreFieldElement: {
+        prototype: HTMLScoreFieldElement;
+        new (): HTMLScoreFieldElement;
+    };
+    interface HTMLScorePanelElement extends Components.ScorePanel, HTMLStencilElement {
+    }
+    var HTMLScorePanelElement: {
+        prototype: HTMLScorePanelElement;
+        new (): HTMLScorePanelElement;
+    };
+    interface HTMLScxEmptyStateElementEventMap {
+        "iconClick": void;
+    }
     interface HTMLScxEmptyStateElement extends Components.ScxEmptyState, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScxEmptyStateElementEventMap>(type: K, listener: (this: HTMLScxEmptyStateElement, ev: ScxEmptyStateCustomEvent<HTMLScxEmptyStateElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScxEmptyStateElementEventMap>(type: K, listener: (this: HTMLScxEmptyStateElement, ev: ScxEmptyStateCustomEvent<HTMLScxEmptyStateElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLScxEmptyStateElement: {
         prototype: HTMLScxEmptyStateElement;
@@ -264,30 +327,6 @@ declare global {
     var HTMLScxExampleComponentsElement: {
         prototype: HTMLScxExampleComponentsElement;
         new (): HTMLScxExampleComponentsElement;
-    };
-    /**
-     * Range Example Component
-     * Demonstrates various use cases of the Shoelace sl-range component with different configurations.
-     * Features:
-     * - Basic range slider with default settings
-     * - Custom min, max, and step values
-     * - Range with labels and help text
-     * - Range with tooltip for real-time value display
-     * - Disabled state demonstration
-     * - Multiple ranges with different configurations
-     * - Real-time value updates
-     * Usage:
-     * ```html
-     * <scx-example-range></scx-example-range>
-     * ```
-     * sl-range Documentation:
-     * https://shoelace.style/components/range
-     */
-    interface HTMLScxExampleRangeElement extends Components.ScxExampleRange, HTMLStencilElement {
-    }
-    var HTMLScxExampleRangeElement: {
-        prototype: HTMLScxExampleRangeElement;
-        new (): HTMLScxExampleRangeElement;
     };
     interface HTMLScxIconsExampleElement extends Components.ScxIconsExample, HTMLStencilElement {
     }
@@ -337,8 +376,6 @@ declare global {
         "smStyle": StyleEventDetail;
         "smSelect": { checked: boolean; value: unknown };
         "smDeselect": void;
-        "smFocus": void;
-        "smBlur": void;
     }
     interface HTMLScxRadioButtonElement extends Components.ScxRadioButton, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScxRadioButtonElementEventMap>(type: K, listener: (this: HTMLScxRadioButtonElement, ev: ScxRadioButtonCustomEvent<HTMLScxRadioButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -371,21 +408,6 @@ declare global {
         prototype: HTMLScxRadioGroupElement;
         new (): HTMLScxRadioGroupElement;
     };
-    /**
-     * Root Component (Application Shell)
-     * Responsibilities:
-     * - Initialize DI container with runtime config (API base URL)
-     * - Render loading state during initialization
-     * - Mount application component(s) after initialization
-     * **IMPORTANT**: This component handles ONLY container initialization.
-     * No business logic, no service usage, no subscriptions.
-     * Application logic belongs in app components (smilecx-outbound-manager, etc.)
-     * Pattern: Shell layer (init) vs Application layer (business logic)
-     * Usage:
-     * ```html
-     * <scx-root api-url="http://localhost:3001/t/acme-corp/v1"></scx-root>
-     * ```
-     */
     interface HTMLScxRootElement extends Components.ScxRoot, HTMLStencilElement {
     }
     var HTMLScxRootElement: {
@@ -433,9 +455,13 @@ declare global {
         new (): HTMLSmilecxOutboundManagerElement;
     };
     interface HTMLElementTagNameMap {
+        "add-model": HTMLAddModelElement;
+        "add-score": HTMLAddScoreElement;
+        "movable-rows-table": HTMLMovableRowsTableElement;
+        "score-field": HTMLScoreFieldElement;
+        "score-panel": HTMLScorePanelElement;
         "scx-empty-state": HTMLScxEmptyStateElement;
         "scx-example-components": HTMLScxExampleComponentsElement;
-        "scx-example-range": HTMLScxExampleRangeElement;
         "scx-icons-example": HTMLScxIconsExampleElement;
         "scx-modal-example": HTMLScxModalExampleElement;
         "scx-radio-button": HTMLScxRadioButtonElement;
@@ -446,10 +472,46 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}` | `prop:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K | `prop:${K}`]?: never } | { [P in `prop:${K}`]: PropT } & { [P in K | `attr:${K}`]?: never };
+
+    interface AddModel {
+    }
+    interface AddScore {
+        "addNewField"?: boolean;
+        /**
+          * @default {     id: 0,     name: '',     type: '',     weight: 0,     scores: [],   }
+         */
+        "field"?: FieldToSend;
+        /**
+          * @default 0
+         */
+        "fieldIndex"?: number;
+        "onAddField"?: (event: AddScoreCustomEvent<FieldToSend>) => void;
+        "onCloseNewDialog"?: (event: AddScoreCustomEvent<any>) => void;
+        "onDeleteField"?: (event: AddScoreCustomEvent<number>) => void;
+        "onEditField"?: (event: AddScoreCustomEvent<{ field: FieldToSend; key: number }>) => void;
+        "scope": 'Contactability' | 'Propensity';
+    }
+    interface MovableRowsTable {
+        "onChangePage"?: (event: MovableRowsTableCustomEvent<string>) => void;
+    }
+    interface ScoreField {
+        "editMode": boolean;
+        "field": FieldToSend;
+        "nScore": number;
+        "onDeleteScore"?: (event: ScoreFieldCustomEvent<number>) => void;
+        "onEditCheck"?: (event: ScoreFieldCustomEvent<1 | 3 | null>) => void;
+        "onEditScore"?: (event: ScoreFieldCustomEvent<Score>) => void;
+        "switch"?: 1 | 3 | null;
+    }
+    interface ScorePanel {
+        "scope": 'Contactability' | 'Propensity';
+    }
     interface ScxEmptyState {
         "esTitle"?: string;
         "icon": string;
         "label"?: string;
+        "onIconClick"?: (event: ScxEmptyStateCustomEvent<void>) => void;
     }
     /**
      * Example Components Showcase
@@ -470,26 +532,6 @@ declare namespace LocalJSX {
      * ```
      */
     interface ScxExampleComponents {
-    }
-    /**
-     * Range Example Component
-     * Demonstrates various use cases of the Shoelace sl-range component with different configurations.
-     * Features:
-     * - Basic range slider with default settings
-     * - Custom min, max, and step values
-     * - Range with labels and help text
-     * - Range with tooltip for real-time value display
-     * - Disabled state demonstration
-     * - Multiple ranges with different configurations
-     * - Real-time value updates
-     * Usage:
-     * ```html
-     * <scx-example-range></scx-example-range>
-     * ```
-     * sl-range Documentation:
-     * https://shoelace.style/components/range
-     */
-    interface ScxExampleRange {
     }
     interface ScxIconsExample {
     }
@@ -527,70 +569,32 @@ declare namespace LocalJSX {
      */
     interface ScxModalExample {
         /**
-          * Modal message (optional) Passed via componentProps
           * @default 'This is an example modal component.'
          */
         "message"?: string;
-        /**
-          * Modal service reference Automatically injected by Modal Service
-         */
         "modal": IModal;
         /**
-          * Modal title (optional) Passed via componentProps
           * @default 'Example Modal'
          */
         "modalTitle"?: string;
     }
     interface ScxRadioButton {
         /**
-          * If `true`, the radio is selected.
           * @default false
          */
         "checked"?: boolean;
         /**
-          * If `true`, the user cannot interact with the radio.
           * @default false
          */
         "disabled"?: boolean;
         /**
-          * The name of the control, which is submitted with the form data.
           * @default this.inputId
          */
         "name"?: string;
-        /**
-          * Emitted when the radio button loses focus.
-         */
-        "onSmBlur"?: (event: ScxRadioButtonCustomEvent<void>) => void;
-        /**
-          * Emitted when a checked radio button is deselected.
-         */
         "onSmDeselect"?: (event: ScxRadioButtonCustomEvent<void>) => void;
-        /**
-          * Emitted when the radio button gains focus.
-         */
-        "onSmFocus"?: (event: ScxRadioButtonCustomEvent<void>) => void;
-        /**
-          * Emitted when the radio button is selected.
-         */
         "onSmSelect"?: (event: ScxRadioButtonCustomEvent<{ checked: boolean; value: unknown }>) => void;
-        /**
-          * Emitted when the styles change.
-         */
         "onSmStyle"?: (event: ScxRadioButtonCustomEvent<StyleEventDetail>) => void;
-        /**
-          * The size of the radio button.
-          * @default 'medium'
-         */
-        "size"?: 'small' | 'medium' | 'large';
-        /**
-          * The value of the radio button.
-         */
         "value"?: unknown;
-        /**
-          * The color variant of the radio button.
-          * @default 'default'
-         */
-        "variant"?: 'default' | 'neutral' | 'light';
     }
     interface ScxRadioGroup {
         /**
@@ -627,26 +631,8 @@ declare namespace LocalJSX {
          */
         "variant"?: 'default' | 'neutral' | 'light';
     }
-    /**
-     * Root Component (Application Shell)
-     * Responsibilities:
-     * - Initialize DI container with runtime config (API base URL)
-     * - Render loading state during initialization
-     * - Mount application component(s) after initialization
-     * **IMPORTANT**: This component handles ONLY container initialization.
-     * No business logic, no service usage, no subscriptions.
-     * Application logic belongs in app components (smilecx-outbound-manager, etc.)
-     * Pattern: Shell layer (init) vs Application layer (business logic)
-     * Usage:
-     * ```html
-     * <scx-root api-url="http://localhost:3001/t/acme-corp/v1"></scx-root>
-     * ```
-     */
     interface ScxRoot {
         /**
-          * API base URL for backend requests Passed to container during initialization
-          * @example // Development api-url="http://localhost:3001/t/acme-corp/v1"
-          * @example // Production api-url="https://api.smilecx.com/t/acme-corp/v1"
           * @default ''
          */
         "apiUrl"?: string;
@@ -683,15 +669,58 @@ declare namespace LocalJSX {
      */
     interface SmilecxOutboundManager {
     }
+
+    interface AddScoreAttributes {
+        "addNewField": boolean;
+        "fieldIndex": number;
+        "scope": 'Contactability' | 'Propensity';
+    }
+    interface ScoreFieldAttributes {
+        "editMode": boolean;
+        "nScore": number;
+        "switch": 1 | 3 | null;
+    }
+    interface ScorePanelAttributes {
+        "scope": 'Contactability' | 'Propensity';
+    }
+    interface ScxEmptyStateAttributes {
+        "icon": string;
+        "label": string;
+        "esTitle": string;
+    }
+    interface ScxModalExampleAttributes {
+        "modalTitle": string;
+        "message": string;
+    }
+    interface ScxRadioButtonAttributes {
+        "name": string;
+        "disabled": boolean;
+        "checked": boolean;
+    }
+    interface ScxRadioGroupAttributes {
+        "allowEmptySelection": boolean;
+        "name": string;
+        "size": 'small' | 'medium' | 'large';
+        "contain": 'fill' | 'hug';
+        "variant": 'default' | 'neutral' | 'light';
+    }
+    interface ScxRootAttributes {
+        "apiUrl": string;
+    }
+
     interface IntrinsicElements {
-        "scx-empty-state": ScxEmptyState;
+        "add-model": AddModel;
+        "add-score": Omit<AddScore, keyof AddScoreAttributes> & { [K in keyof AddScore & keyof AddScoreAttributes]?: AddScore[K] } & { [K in keyof AddScore & keyof AddScoreAttributes as `attr:${K}`]?: AddScoreAttributes[K] } & { [K in keyof AddScore & keyof AddScoreAttributes as `prop:${K}`]?: AddScore[K] } & OneOf<"scope", AddScore["scope"], AddScoreAttributes["scope"]>;
+        "movable-rows-table": MovableRowsTable;
+        "score-field": Omit<ScoreField, keyof ScoreFieldAttributes> & { [K in keyof ScoreField & keyof ScoreFieldAttributes]?: ScoreField[K] } & { [K in keyof ScoreField & keyof ScoreFieldAttributes as `attr:${K}`]?: ScoreFieldAttributes[K] } & { [K in keyof ScoreField & keyof ScoreFieldAttributes as `prop:${K}`]?: ScoreField[K] } & OneOf<"editMode", ScoreField["editMode"], ScoreFieldAttributes["editMode"]> & OneOf<"nScore", ScoreField["nScore"], ScoreFieldAttributes["nScore"]>;
+        "score-panel": Omit<ScorePanel, keyof ScorePanelAttributes> & { [K in keyof ScorePanel & keyof ScorePanelAttributes]?: ScorePanel[K] } & { [K in keyof ScorePanel & keyof ScorePanelAttributes as `attr:${K}`]?: ScorePanelAttributes[K] } & { [K in keyof ScorePanel & keyof ScorePanelAttributes as `prop:${K}`]?: ScorePanel[K] } & OneOf<"scope", ScorePanel["scope"], ScorePanelAttributes["scope"]>;
+        "scx-empty-state": Omit<ScxEmptyState, keyof ScxEmptyStateAttributes> & { [K in keyof ScxEmptyState & keyof ScxEmptyStateAttributes]?: ScxEmptyState[K] } & { [K in keyof ScxEmptyState & keyof ScxEmptyStateAttributes as `attr:${K}`]?: ScxEmptyStateAttributes[K] } & { [K in keyof ScxEmptyState & keyof ScxEmptyStateAttributes as `prop:${K}`]?: ScxEmptyState[K] } & OneOf<"icon", ScxEmptyState["icon"], ScxEmptyStateAttributes["icon"]>;
         "scx-example-components": ScxExampleComponents;
-        "scx-example-range": ScxExampleRange;
         "scx-icons-example": ScxIconsExample;
-        "scx-modal-example": ScxModalExample;
-        "scx-radio-button": ScxRadioButton;
-        "scx-radio-group": ScxRadioGroup;
-        "scx-root": ScxRoot;
+        "scx-modal-example": Omit<ScxModalExample, keyof ScxModalExampleAttributes> & { [K in keyof ScxModalExample & keyof ScxModalExampleAttributes]?: ScxModalExample[K] } & { [K in keyof ScxModalExample & keyof ScxModalExampleAttributes as `attr:${K}`]?: ScxModalExampleAttributes[K] } & { [K in keyof ScxModalExample & keyof ScxModalExampleAttributes as `prop:${K}`]?: ScxModalExample[K] };
+        "scx-radio-button": Omit<ScxRadioButton, keyof ScxRadioButtonAttributes> & { [K in keyof ScxRadioButton & keyof ScxRadioButtonAttributes]?: ScxRadioButton[K] } & { [K in keyof ScxRadioButton & keyof ScxRadioButtonAttributes as `attr:${K}`]?: ScxRadioButtonAttributes[K] } & { [K in keyof ScxRadioButton & keyof ScxRadioButtonAttributes as `prop:${K}`]?: ScxRadioButton[K] };
+        "scx-radio-group": Omit<ScxRadioGroup, keyof ScxRadioGroupAttributes> & { [K in keyof ScxRadioGroup & keyof ScxRadioGroupAttributes]?: ScxRadioGroup[K] } & { [K in keyof ScxRadioGroup & keyof ScxRadioGroupAttributes as `attr:${K}`]?: ScxRadioGroupAttributes[K] } & { [K in keyof ScxRadioGroup & keyof ScxRadioGroupAttributes as `prop:${K}`]?: ScxRadioGroup[K] };
+        "scx-root": Omit<ScxRoot, keyof ScxRootAttributes> & { [K in keyof ScxRoot & keyof ScxRootAttributes]?: ScxRoot[K] } & { [K in keyof ScxRoot & keyof ScxRootAttributes as `attr:${K}`]?: ScxRootAttributes[K] } & { [K in keyof ScxRoot & keyof ScxRootAttributes as `prop:${K}`]?: ScxRoot[K] };
         "scx-tabulator-example": ScxTabulatorExample;
         "smilecx-outbound-manager": SmilecxOutboundManager;
     }
@@ -700,7 +729,12 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "scx-empty-state": LocalJSX.ScxEmptyState & JSXBase.HTMLAttributes<HTMLScxEmptyStateElement>;
+            "add-model": LocalJSX.IntrinsicElements["add-model"] & JSXBase.HTMLAttributes<HTMLAddModelElement>;
+            "add-score": LocalJSX.IntrinsicElements["add-score"] & JSXBase.HTMLAttributes<HTMLAddScoreElement>;
+            "movable-rows-table": LocalJSX.IntrinsicElements["movable-rows-table"] & JSXBase.HTMLAttributes<HTMLMovableRowsTableElement>;
+            "score-field": LocalJSX.IntrinsicElements["score-field"] & JSXBase.HTMLAttributes<HTMLScoreFieldElement>;
+            "score-panel": LocalJSX.IntrinsicElements["score-panel"] & JSXBase.HTMLAttributes<HTMLScorePanelElement>;
+            "scx-empty-state": LocalJSX.IntrinsicElements["scx-empty-state"] & JSXBase.HTMLAttributes<HTMLScxEmptyStateElement>;
             /**
              * Example Components Showcase
              * Dynamic tab-based documentation component using Shoelace tabs.
@@ -719,27 +753,8 @@ declare module "@stencil/core" {
              * <scx-example-components></scx-example-components>
              * ```
              */
-            "scx-example-components": LocalJSX.ScxExampleComponents & JSXBase.HTMLAttributes<HTMLScxExampleComponentsElement>;
-            /**
-             * Range Example Component
-             * Demonstrates various use cases of the Shoelace sl-range component with different configurations.
-             * Features:
-             * - Basic range slider with default settings
-             * - Custom min, max, and step values
-             * - Range with labels and help text
-             * - Range with tooltip for real-time value display
-             * - Disabled state demonstration
-             * - Multiple ranges with different configurations
-             * - Real-time value updates
-             * Usage:
-             * ```html
-             * <scx-example-range></scx-example-range>
-             * ```
-             * sl-range Documentation:
-             * https://shoelace.style/components/range
-             */
-            "scx-example-range": LocalJSX.ScxExampleRange & JSXBase.HTMLAttributes<HTMLScxExampleRangeElement>;
-            "scx-icons-example": LocalJSX.ScxIconsExample & JSXBase.HTMLAttributes<HTMLScxIconsExampleElement>;
+            "scx-example-components": LocalJSX.IntrinsicElements["scx-example-components"] & JSXBase.HTMLAttributes<HTMLScxExampleComponentsElement>;
+            "scx-icons-example": LocalJSX.IntrinsicElements["scx-icons-example"] & JSXBase.HTMLAttributes<HTMLScxIconsExampleElement>;
             /**
              * Example Modal Component
              * Demonstrates how to create a modal content component that works with the Modal Service.
@@ -772,25 +787,10 @@ declare module "@stencil/core" {
              * modal.show();
              * ```
              */
-            "scx-modal-example": LocalJSX.ScxModalExample & JSXBase.HTMLAttributes<HTMLScxModalExampleElement>;
-            "scx-radio-button": LocalJSX.ScxRadioButton & JSXBase.HTMLAttributes<HTMLScxRadioButtonElement>;
-            "scx-radio-group": LocalJSX.ScxRadioGroup & JSXBase.HTMLAttributes<HTMLScxRadioGroupElement>;
-            /**
-             * Root Component (Application Shell)
-             * Responsibilities:
-             * - Initialize DI container with runtime config (API base URL)
-             * - Render loading state during initialization
-             * - Mount application component(s) after initialization
-             * **IMPORTANT**: This component handles ONLY container initialization.
-             * No business logic, no service usage, no subscriptions.
-             * Application logic belongs in app components (smilecx-outbound-manager, etc.)
-             * Pattern: Shell layer (init) vs Application layer (business logic)
-             * Usage:
-             * ```html
-             * <scx-root api-url="http://localhost:3001/t/acme-corp/v1"></scx-root>
-             * ```
-             */
-            "scx-root": LocalJSX.ScxRoot & JSXBase.HTMLAttributes<HTMLScxRootElement>;
+            "scx-modal-example": LocalJSX.IntrinsicElements["scx-modal-example"] & JSXBase.HTMLAttributes<HTMLScxModalExampleElement>;
+            "scx-radio-button": LocalJSX.IntrinsicElements["scx-radio-button"] & JSXBase.HTMLAttributes<HTMLScxRadioButtonElement>;
+            "scx-radio-group": LocalJSX.IntrinsicElements["scx-radio-group"] & JSXBase.HTMLAttributes<HTMLScxRadioGroupElement>;
+            "scx-root": LocalJSX.IntrinsicElements["scx-root"] & JSXBase.HTMLAttributes<HTMLScxRootElement>;
             /**
              * Tabulator Example Component
              * Demonstrates how to use Tabulator with custom styling and sorting.
@@ -806,7 +806,7 @@ declare module "@stencil/core" {
              * <scx-tabulator-example></scx-tabulator-example>
              * ```
              */
-            "scx-tabulator-example": LocalJSX.ScxTabulatorExample & JSXBase.HTMLAttributes<HTMLScxTabulatorExampleElement>;
+            "scx-tabulator-example": LocalJSX.IntrinsicElements["scx-tabulator-example"] & JSXBase.HTMLAttributes<HTMLScxTabulatorExampleElement>;
             /**
              * Outbound Manager Application Component
              * Demonstrates core patterns for SmileCX applications:
@@ -820,7 +820,7 @@ declare module "@stencil/core" {
              * building their own SmileCX-compatible applications.
              * Pattern: Application layer (business logic + UI)
              */
-            "smilecx-outbound-manager": LocalJSX.SmilecxOutboundManager & JSXBase.HTMLAttributes<HTMLSmilecxOutboundManagerElement>;
+            "smilecx-outbound-manager": LocalJSX.IntrinsicElements["smilecx-outbound-manager"] & JSXBase.HTMLAttributes<HTMLSmilecxOutboundManagerElement>;
         }
     }
 }

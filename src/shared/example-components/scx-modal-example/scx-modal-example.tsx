@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Host, Prop, h } from '@stencil/core';
+import { Component, ComponentInterface, Host, Listen, Prop, State, h } from '@stencil/core';
 import type { IModal } from '../../../libs/modal';
 
 /**
@@ -46,38 +46,53 @@ import type { IModal } from '../../../libs/modal';
   shadow: true,
 })
 export class ScxModalExample implements ComponentInterface {
-  /**
-   * Modal service reference
-   * Automatically injected by Modal Service
-   */
   @Prop() modal!: IModal;
-
-  /**
-   * Modal title (optional)
-   * Passed via componentProps
-   */
   @Prop() modalTitle = 'Example Modal';
-
-  /**
-   * Modal message (optional)
-   * Passed via componentProps
-   */
   @Prop() message = 'This is an example modal component.';
+  @State() selectedRadioValue = 'mapping';
+  @State() tableOn = false;
 
-  /**
-   * Handle confirm action
-   * Closes modal with confirm flag
-   */
   private handleConfirm = () => {
+    switch (this.selectedRadioValue) {
+      case 'mapping':
+        if (this.tableOn) this.selectedRadioValue = 'scoring';
+        break;
+      case 'scoring':
+        return;
+      default:
+        return;
+    }
     this.modal.close({ confirm: true });
   };
-
-  /**
-   * Handle cancel action
-   * Closes modal with dismiss flag
-   */
-  private handleCancel = () => {
+  handleCancel = () => {
     this.modal.close({ dismiss: true });
+  };
+  private handleRadioChange = (event: CustomEvent) => {
+    this.selectedRadioValue = event.detail.value;
+  };
+
+  @Listen('changePage')
+  handleAddField(event: CustomEvent<string>) {
+    this.selectedRadioValue = event.detail;
+  }
+
+  renderContent = () => {
+    switch (this.selectedRadioValue) {
+      case 'mapping':
+        // return <movable-rows-table></movable-rows-table>;
+        return <add-model></add-model>;
+      case 'scoring':
+        return (
+          <div class="scoresDialog">
+            <score-panel scope="Contactability"></score-panel>
+            <score-panel scope="Propensity"></score-panel>
+          </div>
+        );
+      case 'options':
+        return <p>options.</p>;
+      default:
+        return null;
+    }
   };
 
   render() {
@@ -90,7 +105,17 @@ export class ScxModalExample implements ComponentInterface {
           </div>
 
           <div class="modal-content">
-            <p>{this.message}</p>
+            <scx-radio-group
+              value={this.selectedRadioValue}
+              size="medium"
+              variant="light"
+              onSmChange={this.handleRadioChange}
+            >
+              <scx-radio-button value="mapping">Mapping</scx-radio-button>
+              <scx-radio-button value="scoring">Scoring</scx-radio-button>
+              <scx-radio-button value="options">Options</scx-radio-button>
+            </scx-radio-group>
+            {this.renderContent()}
           </div>
 
           <div class="modal-footer">
